@@ -880,8 +880,18 @@ const ChristeningLandingPage = () => {
           <div className="container">
             <div className="timeline-header">
               <h2 className="section-title animate-on-scroll">Sacred Journey Timeline</h2>
-              <button className="close-section-btn" onClick={toggleTimeline}>×</button>
+              <div className="timeline-controls">
+                <button 
+                  className="collapse-toggle"
+                  onClick={() => toggleSection('timeline')}
+                  title={collapsedSections.timeline ? 'Expand Details' : 'Collapse Details'}
+                >
+                  {collapsedSections.timeline ? '⬇️' : '⬆️'}
+                </button>
+                <button className="close-section-btn" onClick={toggleTimeline}>×</button>
+              </div>
             </div>
+            
             <div className="timeline-track">
               <div className="timeline-line"></div>
               {timelineItems.map((item, index) => (
@@ -890,7 +900,9 @@ const ChristeningLandingPage = () => {
                     <div className="timeline-dot"></div>
                     <h3>{item.icon} {item.title}</h3>
                     <p className="timeline-time">{item.time}</p>
-                    <p>{item.description}</p>
+                    {!collapsedSections.timeline && (
+                      <p>{item.description}</p>
+                    )}
                   </div>
                 </div>
               ))}
