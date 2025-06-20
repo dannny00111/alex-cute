@@ -33,15 +33,6 @@ const ChristeningLandingPage = () => {
     }, 1000);
   };
 
-  const [selectedMedia, setSelectedMedia] = useState(null);
-  const [showLightbox, setShowLightbox] = useState(false);
-  const [mediaData, setMediaData] = useState({ photos: [], videos: [] });
-  const [isLoadingMedia, setIsLoadingMedia] = useState(false);
-
-  // Google Drive API configuration
-  const FOLDER_ID = "1sk7C-nQPr2yfFtbpQGjFO1OPlXp9HPB9";
-  const API_KEY = "AIzaSyCMaBUGCG5oZUdoF1VZz-wKQehd_ktYA5I";
-
   // Load media from Google Drive
   const loadMediaFromDrive = async () => {
     setIsLoadingMedia(true);
