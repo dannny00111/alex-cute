@@ -1177,48 +1177,79 @@ const ChristeningLandingPage = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="testimonials-section" ref={testimonialsRef}>
+      <section id="testimonials" className="testimonials-section animate-on-scroll">
         <div className="testimonials-background"></div>
         <div className="container">
           <div className="testimonials-header">
-            <h2 className="section-title white animate-on-scroll">Messages of Love & Blessings</h2>
+            <h2 className="section-title white">Blessed Messages & Testimonials</h2>
             <button 
-              className="collapse-toggle white"
+              className="collapse-toggle"
               onClick={() => toggleSection('testimonials')}
-              title={collapsedSections.testimonials ? 'Expand' : 'Collapse'}
+              title={collapsedSections.testimonials ? 'Expand Messages' : 'Collapse Messages'}
+              aria-label={collapsedSections.testimonials ? 'Expand testimonials section' : 'Collapse testimonials section'}
             >
-              {collapsedSections.testimonials ? '⬇️' : '⬆️'}
+              <span className="toggle-arrow">
+                {collapsedSections.testimonials ? '⬇️' : '⬆️'}
+              </span>
             </button>
           </div>
-          
-          {!collapsedSections.testimonials && (
-            <>
-              <div className="testimonials-grid animate-on-scroll">
-                {guestComments.slice(0, 4).map((comment) => (
-                  <div key={comment.id} className="testimonial-card">
-                    <div className="testimonial-quote">"</div>
-                    <p className="testimonial-text">{comment.message}</p>
-                    <div className="testimonial-author">
-                      <div className="comment-avatar">{comment.avatar}</div>
-                      <div className="author-info">
-                        <h4>{comment.name}</h4>
-                        <span>{comment.timestamp}</span>
-                      </div>
-                    </div>
+
+          <div className={`collapsible-content ${collapsedSections.testimonials ? 'collapsed' : 'expanded'}`}>
+            <div className="testimonials-grid">
+              <div className="testimonial-card">
+                <div className="testimonial-quote">"</div>
+                <p className="testimonial-text">
+                  What a blessed and beautiful ceremony! {ceremonyDetails.displayName} is truly a gift from God. 
+                  Her names carry such profound meaning and divine purpose. May she grow in wisdom and grace.
+                </p>
+                <div className="testimonial-author">
+                  <div className="author-info">
+                    <h4>👵 Grandma Adunni</h4>
+                    <span>Family Elder</span>
                   </div>
-                ))}
+                </div>
               </div>
-              
-              <div className="add-message-section">
-                <button
-                  className="add-message-btn"
-                  onClick={() => setShowGuestBook(true)}
-                >
-                  💌 Add Your Blessing
-                </button>
+
+              <div className="testimonial-card">
+                <div className="testimonial-quote">"</div>
+                <p className="testimonial-text">
+                  Witnessing {ceremonyDetails.displayName}'s naming ceremony was a divine experience. The joy, 
+                  the blessings, the sacred names - everything was perfect. God's favor shines upon this family.
+                </p>
+                <div className="testimonial-author">
+                  <div className="author-info">
+                    <h4>🙏 Pastor Adebayo</h4>
+                    <span>Officiating Minister</span>
+                  </div>
+                </div>
               </div>
-            </>
-          )}
+
+              <div className="testimonial-card">
+                <div className="testimonial-quote">"</div>
+                <p className="testimonial-text">
+                  Such a precious little angel! {ceremonyDetails.displayName}'s names are so meaningful. 
+                  May the Lord continue to bless her journey and keep her in His loving care always.
+                </p>
+                <div className="testimonial-author">
+                  <div className="author-info">
+                    <h4>👨‍👩‍👧‍👦 The Johnson Family</h4>
+                    <span>Family Friends</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="section-divider"></div>
+
+            <div className="add-message-section">
+              <button 
+                onClick={() => setShowGuestBook(true)} 
+                className="add-message-btn"
+              >
+                📖 Add Your Blessing Message
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
