@@ -842,10 +842,7 @@ const ChristeningLandingPage = () => {
                 onClick={(e) => handleButtonClick(() => enterImmersiveMode(mediaData.photos[0]), e)}
                 className="hero-cta secondary"
               >
-                Immersive View
-              </button>
-=======
->>>>>>> origin/background-video-access-code-page-remove-immersive-view-sacred-memories
+            </div>
             </div>
           </div>
         </div>
