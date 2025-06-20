@@ -850,8 +850,20 @@ const ChristeningLandingPage = () => {
                 </div>
                 
                 <div className="detail-card">
-                  <h3>✨ Her Beautiful Names</h3>
-                  {!collapsedSections.aboutNames ? (
+                  <div className="detail-header">
+                    <h3>✨ Her Beautiful Names</h3>
+                    <button 
+                      className="collapse-toggle small"
+                      onClick={() => toggleSection('aboutNames')}
+                      title={collapsedSections.aboutNames ? 'Expand Names' : 'Collapse Names'}
+                      aria-label={collapsedSections.aboutNames ? 'Expand names meanings' : 'Collapse names meanings'}
+                    >
+                      <span className="toggle-arrow">
+                        {collapsedSections.aboutNames ? '⬇️' : '⬆️'}
+                      </span>
+                    </button>
+                  </div>
+                  <div className={`collapsible-content ${collapsedSections.aboutNames ? 'collapsed' : 'expanded'}`}>
                     <div className="names-breakdown">
                       {ceremonyDetails.namesMeanings.map((name, index) => (
                         <p key={index}>
@@ -859,7 +871,8 @@ const ChristeningLandingPage = () => {
                         </p>
                       ))}
                     </div>
-                  ) : (
+                  </div>
+                  {collapsedSections.aboutNames && (
                     <p className="names-summary">
                       <strong>{ceremonyDetails.fullName}</strong> - Click to expand meanings
                     </p>
