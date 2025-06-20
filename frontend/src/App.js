@@ -636,12 +636,7 @@ const ChristeningLandingPage = () => {
           muted
           loop
           playsInline
-<<<<<<< HEAD
-          onError={(e) => console.log('Password screen video load error:', e)}
-=======
-          onLoadedData={handleBackgroundVideoLoad}
           onError={handleBackgroundVideoError}
->>>>>>> origin/background-video-access-code-page-remove-immersive-view-sacred-memories
         >
           <source src={BACKGROUND_VIDEO_URL} type="video/mp4" />
         </video>
