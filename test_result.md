@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-## user_problem_statement: "Add Google Drive background video to hero section, add second video to gallery, implement media reshuffling on page reload, and make implementation neat"
+## user_problem_statement: "Remove '90 photos and 10 videos' section, add Google Drive background video to access code page and home page, make page collapsible with dropdowns to reduce scrolling, ensure Netlify deployment compatibility"
 
 ## backend:
 ##   - task: "Backend API Setup"
