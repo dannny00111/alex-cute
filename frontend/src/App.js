@@ -680,9 +680,29 @@ const ChristeningLandingPage = () => {
         </nav>
       )}
 
-      {/* Hero Section with Real Invitation Background */}
+      {/* Hero Section with Background Video */}
       <section id="hero" className="hero-section" ref={heroRef}>
+        {/* Background Video */}
+        <video 
+          ref={backgroundVideoRef}
+          className="hero-video-background"
+          autoPlay
+          muted
+          loop
+          playsInline
+          onLoadedData={handleBackgroundVideoLoad}
+          onError={handleBackgroundVideoError}
+        >
+          <source src={BACKGROUND_VIDEO_URL} type="video/mp4" />
+          {/* Fallback for browsers that don't support video */}
+        </video>
+        
+        {/* Video Overlay */}
+        <div className="hero-video-overlay"></div>
+        
+        {/* Fallback Background Image */}
         <div className="hero-background invitation-background"></div>
+        
         <div className="hero-content animate-on-scroll">
           <div className="hero-text">
             <h1 className="hero-title">
