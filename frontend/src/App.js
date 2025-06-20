@@ -52,8 +52,12 @@ const ChristeningLandingPage = () => {
   const API_KEY = "AIzaSyCMaBUGCG5oZUdoF1VZz-wKQehd_ktYA5I";
 
   // Video configuration
-  const VIDEO_ID = "1IWNvGhXP1LKhi_CR2y_LJsxy6ikQ9F7q";
-  const VIDEO_URL = `https://drive.google.com/uc?export=download&id=${VIDEO_ID}`;
+  const BACKGROUND_VIDEO_ID = "1IWNvGhXP1LKhi_CR2y_LJsxy6ikQ9F7q";
+  const BACKGROUND_VIDEO_URL = `https://drive.google.com/uc?export=download&id=${BACKGROUND_VIDEO_ID}`;
+  
+  // Additional video for gallery
+  const GALLERY_VIDEO_ID = "163rWffXF7pW38eBzRbaZz2yycHMkme_3";
+  const GALLERY_VIDEO_URL = `https://drive.google.com/uc?export=download&id=${GALLERY_VIDEO_ID}`;
 
   // Real ceremony details
   const ceremonyDetails = {
