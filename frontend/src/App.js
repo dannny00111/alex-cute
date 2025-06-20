@@ -884,25 +884,37 @@ const ChristeningLandingPage = () => {
       {/* Gallery Introduction */}
       <section className="gallery-intro animate-on-scroll">
         <div className="container">
-          <div className="intro-content">
+          <div className="intro-header">
             <h2 className="section-title">Sacred Memories</h2>
-            <p className="section-description">
-              Witness the divine moments of {ceremonyDetails.displayName}'s naming ceremony through our carefully curated collection 
-              of photos and videos. Each image tells a story of love, faith, and heavenly blessings from {ceremonyDetails.ceremonyDate}.
-            </p>
-            
-            <div className="gallery-preview hover-lift">
-              <div className="preview-image">
-                <img src="https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg" alt="Naming ceremony celebration" />
-                <div className="preview-overlay">
-                  <div className="preview-message">
-                    <p className="preview-text">✨ Sacred memories await your discovery ✨</p>
-                    <p className="preview-subtitle">Witness the divine moments of Alexandra's naming ceremony</p>
+            <button 
+              className="collapse-toggle"
+              onClick={() => toggleSection('galleryIntro')}
+              title={collapsedSections.galleryIntro ? 'Expand' : 'Collapse'}
+            >
+              {collapsedSections.galleryIntro ? '⬇️' : '⬆️'}
+            </button>
+          </div>
+          
+          {!collapsedSections.galleryIntro && (
+            <div className="intro-content">
+              <p className="section-description">
+                Witness the divine moments of {ceremonyDetails.displayName}'s naming ceremony through our carefully curated collection 
+                of photos and videos. Each image tells a story of love, faith, and heavenly blessings from {ceremonyDetails.ceremonyDate}.
+              </p>
+              
+              <div className="gallery-preview hover-lift">
+                <div className="preview-image">
+                  <img src="https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg" alt="Naming ceremony celebration" />
+                  <div className="preview-overlay">
+                    <div className="preview-message">
+                      <p className="preview-text">✨ Sacred memories await your discovery ✨</p>
+                      <p className="preview-subtitle">Witness the divine moments of Alexandra's naming ceremony</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
