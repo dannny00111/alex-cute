@@ -669,7 +669,7 @@ const ChristeningLandingPage = () => {
           <div className="password-card">
             {/* Enhanced Dark Mode Toggle */}
             <button 
-              onClick={toggleDarkMode} 
+              onClick={(e) => handleButtonClick(() => toggleDarkMode(), e)}
               className="dark-mode-toggle"
               title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               aria-label={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
