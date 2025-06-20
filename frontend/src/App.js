@@ -650,12 +650,8 @@ const ChristeningLandingPage = () => {
           <source src={BACKGROUND_VIDEO_URL} type="video/mp4" />
         </video>
         
-<<<<<<< HEAD
         {/* Video Overlay */}
         <div className="password-video-overlay"></div>
-        
-=======
->>>>>>> origin/background-video-access-code-page-remove-immersive-view-sacred-memories
         {/* Dynamic Background */}
         <div className="dynamic-background"></div>
         
