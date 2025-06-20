@@ -805,12 +805,11 @@ const ChristeningLandingPage = () => {
                 <div className="detail-card">
                   <h3>✨ Her Beautiful Names</h3>
                   <div className="names-breakdown">
-                    <p><strong>Alexandra</strong> - Defender of humanity</p>
-                    <p><strong>Jesolutumitomise</strong> - Jesus has blessed me again</p>
-                    <p><strong>Esther</strong> - Star, hidden</p>
-                    <p><strong>Mojolaoliwa</strong> - I have received God's blessing</p>
-                    <p><strong>Abeiolashewa</strong> - We begged for beauty and received it</p>
-                    <p><strong>Oluwa Adunni</strong> - God's sweetness</p>
+                    {ceremonyDetails.namesMeanings.map((name, index) => (
+                      <p key={index}>
+                        <strong>{name.name}</strong> - {name.meaning}
+                      </p>
+                    ))}
                   </div>
                 </div>
                 <div className="detail-card">
