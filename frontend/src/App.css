@@ -5,6 +5,61 @@
   box-sizing: border-box;
 }
 
+/* Enhanced Global Styles and CSS Variables */
+:root {
+  /* Color Palette */
+  --primary-pink: #d63384;
+  --secondary-pink: #f48fb1;
+  --light-pink: #fce4ec;
+  --accent-pink: #f8bbd9;
+  --text-dark: #2c2c2c;
+  --text-muted: #6c757d;
+  --background-light: #ffffff;
+  --background-subtle: #f8f9fa;
+  --shadow-color: rgba(248, 187, 217, 0.3);
+  --border-color: rgba(248, 187, 217, 0.2);
+  
+  /* Dark Mode Colors */
+  --dark-bg-primary: #1a1a1a;
+  --dark-bg-secondary: #2d2d2d;
+  --dark-bg-tertiary: #404040;
+  --dark-text-primary: #ffffff;
+  --dark-text-secondary: #b3b3b3;
+  --dark-text-muted: #888888;
+  --dark-accent: #ff6b9d;
+  --dark-accent-secondary: #c44569;
+  --dark-shadow: rgba(0, 0, 0, 0.4);
+  --dark-border: rgba(255, 255, 255, 0.1);
+  
+  /* Animation Variables */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  --spring-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  
+  /* Spacing and Sizing */
+  --border-radius: 12px;
+  --border-radius-large: 20px;
+  --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.1);
+  --shadow-large: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Dark Mode Variables */
+.dark-mode {
+  --primary-pink: #ff6b9d;
+  --secondary-pink: #c44569;
+  --light-pink: #2d1b21;
+  --accent-pink: #3d2a2e;
+  --text-dark: #ffffff;
+  --text-muted: #b3b3b3;
+  --background-light: #1a1a1a;
+  --background-subtle: #2d2d2d;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.6;
