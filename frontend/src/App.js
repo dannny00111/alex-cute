@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 
 const ChristeningLandingPage = () => {
@@ -11,6 +11,19 @@ const ChristeningLandingPage = () => {
   const [showLightbox, setShowLightbox] = useState(false);
   const [mediaData, setMediaData] = useState({ photos: [], videos: [] });
   const [isLoadingMedia, setIsLoadingMedia] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [showFloatingNav, setShowFloatingNav] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [showGuestBook, setShowGuestBook] = useState(false);
+  const [guestComments, setGuestComments] = useState([]);
+  const [mediaReactions, setMediaReactions] = useState({});
+  const [galleryLayout, setGalleryLayout] = useState('masonry');
+  const [showStoryMode, setShowStoryMode] = useState(false);
+  
+  // Refs for scroll animations
+  const heroRef = useRef(null);
+  const galleryRef = useRef(null);
+  const testimonialsRef = useRef(null);
 
   // Google Drive API configuration
   const FOLDER_ID = "1sk7C-nQPr2yfFtbpQGjFO1OPlXp9HPB9";
@@ -19,26 +32,45 @@ const ChristeningLandingPage = () => {
   // Simple password check (in production, this should be server-side)
   const correctPassword = 'Alexandra2024';
 
-  const handlePasswordSubmit = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    
-    setTimeout(() => {
-      if (password === correctPassword) {
-        setIsAuthenticated(true);
-      } else {
-        alert('Incorrect password. Please try again.');
+  // Scroll progress and animations
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.pageYOffset;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      setScrollProgress(scrollPercent);
+      
+      // Show floating nav after scrolling past hero
+      setShowFloatingNav(scrollTop > window.innerHeight * 0.5);
+      
+      // Parallax effects
+      if (heroRef.current) {
+        const heroBackground = heroRef.current.querySelector('.hero-background');
+        if (heroBackground) {
+          heroBackground.style.transform = `translateY(${scrollTop * 0.5}px)`;
+        }
       }
-      setIsLoading(false);
-    }, 1000);
-  };
-
-  const getTotalCount = () => {
-    return {
-      photos: mediaData.photos.length,
-      videos: mediaData.videos.length
+      
+      // Animate elements on scroll
+      const animateOnScroll = (elements) => {
+        elements.forEach(el => {
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+            if (isVisible) {
+              el.classList.add('animate-in');
+            }
+          }
+        });
+      };
+      
+      const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
+      animateOnScroll(elementsToAnimate);
     };
-  };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Load media from Google Drive
   const loadMediaFromDrive = async () => {
@@ -70,7 +102,8 @@ const ChristeningLandingPage = () => {
           size: file.size,
           createdTime: file.createdTime,
           downloadUrl: `https://drive.google.com/uc?export=download&id=${file.id}`,
-          viewUrl: `https://drive.google.com/file/d/${file.id}/view`
+          viewUrl: `https://drive.google.com/file/d/${file.id}/view`,
+          aspectRatio: Math.random() > 0.5 ? 'tall' : 'wide' // Random for masonry
         };
         
         if (file.mimeType.startsWith('video')) {
@@ -81,17 +114,25 @@ const ChristeningLandingPage = () => {
       });
       
       setMediaData({ photos, videos });
+      
+      // Initialize reactions for each media item
+      const initialReactions = {};
+      [...photos, ...videos].forEach(item => {
+        initialReactions[item.id] = { hearts: 0, blessings: 0, prayers: 0 };
+      });
+      setMediaReactions(initialReactions);
+      
     } catch (error) {
       console.error('Error loading media:', error);
       // Fallback to sample data if API fails
-      setMediaData({
-        photos: [
-          { id: 1, title: "Loading your photos...", thumbnail: "https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg", type: "photo", driveId: "sample1" },
-        ],
-        videos: [
-          { id: 2, title: "Loading your videos...", thumbnail: "https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg", type: "video", driveId: "sample2" },
-        ]
-      });
+      const fallbackPhotos = [
+        { id: 1, title: "Loading your photos...", thumbnail: "https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg", type: "photo", driveId: "sample1", aspectRatio: 'wide' },
+        { id: 2, title: "Beautiful moments...", thumbnail: "https://images.pexels.com/photos/2088142/pexels-photo-2088142.jpeg", type: "photo", driveId: "sample2", aspectRatio: 'tall' },
+      ];
+      const fallbackVideos = [
+        { id: 3, title: "Loading your videos...", thumbnail: "https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg", type: "video", driveId: "sample3", aspectRatio: 'wide' },
+      ];
+      setMediaData({ photos: fallbackPhotos, videos: fallbackVideos });
     } finally {
       setIsLoadingMedia(false);
     }
@@ -101,18 +142,38 @@ const ChristeningLandingPage = () => {
   useEffect(() => {
     if (isAuthenticated) {
       loadMediaFromDrive();
+      // Initialize guest comments with sample data
+      setGuestComments([
+        { id: 1, name: "Grandma Rose", message: "What a blessed day! Alexandra looks like an angel.", timestamp: new Date().toLocaleDateString(), avatar: "👵" },
+        { id: 2, name: "Uncle John", message: "So proud to witness this sacred moment. Beautiful ceremony!", timestamp: new Date().toLocaleDateString(), avatar: "👨" }
+      ]);
     }
   }, [isAuthenticated]);
 
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    setTimeout(() => {
+      if (password === correctPassword) {
+        setIsAuthenticated(true);
+      } else {
+        alert('Incorrect password. Please try again.');
+      }
+      setIsLoading(false);
+    }, 1000);
+  };
+
   const handleMediaClick = (media) => {
+    const allMedia = getFilteredMedia();
+    const index = allMedia.findIndex(item => item.id === media.id);
+    setLightboxIndex(index);
     setSelectedMedia(media);
     setShowLightbox(true);
   };
 
   const handleDownload = (media) => {
-    // In production, this would trigger download from Google Drive
-    const driveDownloadUrl = `https://drive.google.com/uc?export=download&id=${media.driveId}`;
-    window.open(driveDownloadUrl, '_blank');
+    window.open(media.downloadUrl || `https://drive.google.com/uc?export=download&id=${media.driveId}`, '_blank');
   };
 
   const handleViewInDrive = () => {
@@ -123,6 +184,53 @@ const ChristeningLandingPage = () => {
     if (activeTab === 'photos') return mediaData.photos;
     if (activeTab === 'videos') return mediaData.videos;
     return [...mediaData.photos, ...mediaData.videos];
+  };
+
+  const getTotalCount = () => {
+    const photos = mediaData.photos.length;
+    const videos = mediaData.videos.length;
+    return { photos, videos, total: photos + videos };
+  };
+
+  // Lightbox navigation
+  const navigateLightbox = (direction) => {
+    const allMedia = getFilteredMedia();
+    let newIndex = lightboxIndex + direction;
+    if (newIndex < 0) newIndex = allMedia.length - 1;
+    if (newIndex >= allMedia.length) newIndex = 0;
+    setLightboxIndex(newIndex);
+    setSelectedMedia(allMedia[newIndex]);
+  };
+
+  // Add reaction to media
+  const addReaction = (mediaId, reactionType) => {
+    setMediaReactions(prev => ({
+      ...prev,
+      [mediaId]: {
+        ...prev[mediaId],
+        [reactionType]: (prev[mediaId]?.[reactionType] || 0) + 1
+      }
+    }));
+  };
+
+  // Add guest comment
+  const addGuestComment = (name, message) => {
+    const newComment = {
+      id: Date.now(),
+      name,
+      message,
+      timestamp: new Date().toLocaleDateString(),
+      avatar: name.charAt(0).toUpperCase()
+    };
+    setGuestComments(prev => [newComment, ...prev]);
+  };
+
+  // Scroll to section
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   if (!isAuthenticated) {
@@ -176,10 +284,30 @@ const ChristeningLandingPage = () => {
 
   return (
     <div className="landing-page">
+      {/* Scroll Progress Bar */}
+      <div className="scroll-progress-bar">
+        <div 
+          className="scroll-progress-fill" 
+          style={{ width: `${scrollProgress}%` }}
+        ></div>
+      </div>
+
+      {/* Floating Navigation */}
+      {showFloatingNav && (
+        <nav className="floating-nav">
+          <div className="nav-items">
+            <button onClick={() => scrollToSection('hero')} className="nav-item">Home</button>
+            <button onClick={() => scrollToSection('gallery')} className="nav-item">Gallery</button>
+            <button onClick={() => scrollToSection('testimonials')} className="nav-item">Messages</button>
+            <button onClick={() => setShowGuestBook(true)} className="nav-item">Guest Book</button>
+          </div>
+        </nav>
+      )}
+
       {/* Hero Section */}
-      <section className="hero-section">
+      <section id="hero" className="hero-section" ref={heroRef}>
         <div className="hero-background"></div>
-        <div className="hero-content">
+        <div className="hero-content animate-on-scroll">
           <div className="hero-text">
             <h1 className="hero-title">
               <span className="title-line">Alexandra's</span>
@@ -189,6 +317,20 @@ const ChristeningLandingPage = () => {
               A sacred celebration captured in precious moments
             </p>
             <p className="hero-date">Christening Day • 2024</p>
+            <div className="hero-actions">
+              <button 
+                onClick={() => scrollToSection('gallery')} 
+                className="hero-cta primary"
+              >
+                View Gallery
+              </button>
+              <button 
+                onClick={() => setShowStoryMode(true)} 
+                className="hero-cta secondary"
+              >
+                Story Mode
+              </button>
+            </div>
           </div>
           <div className="hero-decoration">
             <div className="floating-element float-1">🌸</div>
@@ -204,7 +346,7 @@ const ChristeningLandingPage = () => {
       </section>
 
       {/* Gallery Introduction */}
-      <section className="gallery-intro">
+      <section className="gallery-intro animate-on-scroll">
         <div className="container">
           <div className="intro-content">
             <h2 className="section-title">Sacred Memories</h2>
@@ -235,74 +377,137 @@ const ChristeningLandingPage = () => {
       </section>
 
       {/* Media Gallery */}
-      <section className="media-gallery">
+      <section id="gallery" className="media-gallery" ref={galleryRef}>
         <div className="container">
-          <div className="gallery-header">
-            <div className="tab-navigation">
-              <button 
-                className={`tab-button ${activeTab === 'photos' ? 'active' : ''}`}
-                onClick={() => setActiveTab('photos')}
-              >
-                📸 Photos
-              </button>
-              <button 
-                className={`tab-button ${activeTab === 'videos' ? 'active' : ''}`}
-                onClick={() => setActiveTab('videos')}
-              >
-                🎥 Videos
-              </button>
-              <button 
-                className={`tab-button ${activeTab === 'all' ? 'active' : ''}`}
-                onClick={() => setActiveTab('all')}
-              >
-                🎀 All Media
-              </button>
+          <div className="gallery-header animate-on-scroll">
+            <div className="gallery-controls">
+              <div className="tab-navigation">
+                <button 
+                  className={`tab-button ${activeTab === 'photos' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('photos')}
+                >
+                  📸 Photos
+                </button>
+                <button 
+                  className={`tab-button ${activeTab === 'videos' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('videos')}
+                >
+                  🎥 Videos
+                </button>
+                <button 
+                  className={`tab-button ${activeTab === 'all' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('all')}
+                >
+                  🎀 All Media
+                </button>
+              </div>
+              
+              <div className="layout-controls">
+                <button 
+                  className={`layout-btn ${galleryLayout === 'masonry' ? 'active' : ''}`}
+                  onClick={() => setGalleryLayout('masonry')}
+                  title="Masonry Layout"
+                >
+                  ⋮⋯
+                </button>
+                <button 
+                  className={`layout-btn ${galleryLayout === 'grid' ? 'active' : ''}`}
+                  onClick={() => setGalleryLayout('grid')}
+                  title="Grid Layout"
+                >
+                  ⋮⋮
+                </button>
+              </div>
             </div>
           </div>
 
-          <div className="gallery-content">
+          <div className="gallery-content animate-on-scroll">
             <div className="integrated-gallery">
-              <div className="gallery-grid">
-                {getFilteredMedia().map((media) => (
-                  <div key={media.id} className="media-item" onClick={() => handleMediaClick(media)}>
-                    <div className="media-thumbnail">
-                      <img src={media.thumbnail} alt={media.title} />
-                      <div className="media-overlay">
-                        <div className="media-type">
-                          {media.type === 'video' ? (
-                            <>
-                              <span className="play-icon">▶️</span>
-                              <span className="duration">{media.duration}</span>
-                            </>
-                          ) : (
-                            <span className="photo-icon">📸</span>
-                          )}
+              {isLoadingMedia ? (
+                <div className="loading-gallery">
+                  <div className="loading-spinner large"></div>
+                  <p>Loading Alexandra's precious memories...</p>
+                </div>
+              ) : (
+                <div className={`gallery-grid ${galleryLayout}`}>
+                  {getFilteredMedia().map((media, index) => (
+                    <div 
+                      key={media.id} 
+                      className={`media-item ${media.aspectRatio} animate-on-scroll`}
+                      style={{ animationDelay: `${index * 0.1}s` }}
+                      onClick={() => handleMediaClick(media)}
+                    >
+                      <div className="media-thumbnail">
+                        <img src={media.thumbnail} alt={media.title} loading="lazy" />
+                        <div className="media-overlay">
+                          <div className="media-type">
+                            {media.type === 'video' ? (
+                              <>
+                                <span className="play-icon">▶️</span>
+                                <span className="duration">{media.duration || '0:00'}</span>
+                              </>
+                            ) : (
+                              <span className="photo-icon">📸</span>
+                            )}
+                          </div>
+                          <div className="media-actions">
+                            <button className="action-button view-button" title="View">
+                              👁️
+                            </button>
+                            <button 
+                              className="action-button download-button" 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDownload(media);
+                              }}
+                              title="Download"
+                            >
+                              ⬇️
+                            </button>
+                          </div>
                         </div>
-                        <div className="media-actions">
-                          <button className="action-button view-button" title="View">
-                            👁️
-                          </button>
+                      </div>
+                      
+                      <div className="media-info">
+                        <div className="media-title">{media.title}</div>
+                        <div className="media-reactions">
                           <button 
-                            className="action-button download-button" 
+                            className="reaction-btn"
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleDownload(media);
+                              addReaction(media.id, 'hearts');
                             }}
-                            title="Download"
                           >
-                            ⬇️
+                            ❤️ {mediaReactions[media.id]?.hearts || 0}
+                          </button>
+                          <button 
+                            className="reaction-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              addReaction(media.id, 'blessings');
+                            }}
+                          >
+                            🙏 {mediaReactions[media.id]?.blessings || 0}
+                          </button>
+                          <button 
+                            className="reaction-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              addReaction(media.id, 'prayers');
+                            }}
+                          >
+                            ✨ {mediaReactions[media.id]?.prayers || 0}
                           </button>
                         </div>
                       </div>
                     </div>
-                    <div className="media-title">{media.title}</div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
               
               <div className="gallery-footer">
                 <p className="gallery-note">
-                  💝 Click any image to view in full size • Click download to save to your device
+                  💝 Click any image to view in full size • Click reactions to bless the moment
                 </p>
                 <button onClick={handleViewInDrive} className="drive-access-button">
                   View Original Google Drive Folder
@@ -310,53 +515,16 @@ const ChristeningLandingPage = () => {
               </div>
             </div>
           </div>
-
-          {/* Lightbox Modal */}
-          {showLightbox && selectedMedia && (
-            <div className="lightbox-overlay" onClick={() => setShowLightbox(false)}>
-              <div className="lightbox-container" onClick={(e) => e.stopPropagation()}>
-                <button className="lightbox-close" onClick={() => setShowLightbox(false)}>
-                  ✕
-                </button>
-                
-                <div className="lightbox-content">
-                  {selectedMedia.type === 'video' ? (
-                    <div className="video-placeholder">
-                      <div className="video-info">
-                        <h3>{selectedMedia.title}</h3>
-                        <p>Duration: {selectedMedia.duration}</p>
-                        <p>📹 Video content available in Google Drive</p>
-                        <button onClick={() => handleDownload(selectedMedia)} className="download-from-lightbox">
-                          Download Video
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <img src={selectedMedia.thumbnail} alt={selectedMedia.title} className="lightbox-image" />
-                  )}
-                </div>
-                
-                <div className="lightbox-footer">
-                  <h3 className="lightbox-title">{selectedMedia.title}</h3>
-                  <div className="lightbox-actions">
-                    <button onClick={() => handleDownload(selectedMedia)} className="lightbox-download">
-                      Download Original
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section className="testimonials-section">
+      <section id="testimonials" className="testimonials-section" ref={testimonialsRef}>
         <div className="testimonials-background"></div>
         <div className="container">
-          <h2 className="section-title white">Messages of Love</h2>
+          <h2 className="section-title white animate-on-scroll">Messages of Love</h2>
           
-          <div className="testimonials-grid">
+          <div className="testimonials-grid animate-on-scroll">
             <div className="testimonial-card">
               <div className="testimonial-quote">"</div>
               <p className="testimonial-text">
@@ -399,6 +567,15 @@ const ChristeningLandingPage = () => {
               </div>
             </div>
           </div>
+          
+          <div className="add-message-section animate-on-scroll">
+            <button 
+              onClick={() => setShowGuestBook(true)} 
+              className="add-message-btn"
+            >
+              ✍️ Share Your Blessing
+            </button>
+          </div>
         </div>
       </section>
 
@@ -406,7 +583,7 @@ const ChristeningLandingPage = () => {
       <footer className="footer-section">
         <div className="footer-background"></div>
         <div className="container">
-          <div className="footer-content">
+          <div className="footer-content animate-on-scroll">
             <div className="footer-main">
               <h3 className="footer-title">Alexandra's Christening</h3>
               <p className="footer-subtitle">
@@ -450,6 +627,159 @@ const ChristeningLandingPage = () => {
           </div>
         </div>
       </footer>
+
+      {/* Advanced Lightbox Modal */}
+      {showLightbox && selectedMedia && (
+        <div className="lightbox-overlay advanced" onClick={() => setShowLightbox(false)}>
+          <div className="lightbox-container advanced" onClick={(e) => e.stopPropagation()}>
+            <div className="lightbox-header">
+              <div className="lightbox-counter">
+                {lightboxIndex + 1} of {getFilteredMedia().length}
+              </div>
+              <button className="lightbox-close" onClick={() => setShowLightbox(false)}>
+                ✕
+              </button>
+            </div>
+            
+            <div className="lightbox-nav">
+              <button 
+                className="lightbox-nav-btn prev" 
+                onClick={() => navigateLightbox(-1)}
+                disabled={getFilteredMedia().length <= 1}
+              >
+                ‹
+              </button>
+              <button 
+                className="lightbox-nav-btn next" 
+                onClick={() => navigateLightbox(1)}
+                disabled={getFilteredMedia().length <= 1}
+              >
+                ›
+              </button>
+            </div>
+            
+            <div className="lightbox-content">
+              {selectedMedia.type === 'video' ? (
+                <div className="video-placeholder">
+                  <div className="video-info">
+                    <h3>{selectedMedia.title}</h3>
+                    <p>Duration: {selectedMedia.duration || 'Unknown'}</p>
+                    <p>📹 Video content available in Google Drive</p>
+                    <button onClick={() => handleDownload(selectedMedia)} className="download-from-lightbox">
+                      Download Video
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <img src={selectedMedia.thumbnail} alt={selectedMedia.title} className="lightbox-image" />
+              )}
+            </div>
+            
+            <div className="lightbox-footer">
+              <div className="lightbox-info">
+                <h3 className="lightbox-title">{selectedMedia.title}</h3>
+                <div className="lightbox-reactions">
+                  <button onClick={() => addReaction(selectedMedia.id, 'hearts')} className="reaction-btn">
+                    ❤️ {mediaReactions[selectedMedia.id]?.hearts || 0}
+                  </button>
+                  <button onClick={() => addReaction(selectedMedia.id, 'blessings')} className="reaction-btn">
+                    🙏 {mediaReactions[selectedMedia.id]?.blessings || 0}
+                  </button>
+                  <button onClick={() => addReaction(selectedMedia.id, 'prayers')} className="reaction-btn">
+                    ✨ {mediaReactions[selectedMedia.id]?.prayers || 0}
+                  </button>
+                </div>
+              </div>
+              <div className="lightbox-actions">
+                <button onClick={() => handleDownload(selectedMedia)} className="lightbox-download">
+                  Download Original
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Guest Book Modal */}
+      {showGuestBook && (
+        <GuestBookModal 
+          onClose={() => setShowGuestBook(false)}
+          comments={guestComments}
+          onAddComment={addGuestComment}
+        />
+      )}
+    </div>
+  );
+};
+
+// Guest Book Modal Component
+const GuestBookModal = ({ onClose, comments, onAddComment }) => {
+  const [name, setName] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (name.trim() && message.trim()) {
+      onAddComment(name.trim(), message.trim());
+      setName('');
+      setMessage('');
+    }
+  };
+
+  return (
+    <div className="guest-book-overlay" onClick={onClose}>
+      <div className="guest-book-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="guest-book-header">
+          <h2>📖 Guest Book</h2>
+          <button onClick={onClose} className="close-btn">✕</button>
+        </div>
+        
+        <div className="guest-book-content">
+          <form onSubmit={handleSubmit} className="comment-form">
+            <div className="form-group">
+              <input
+                type="text"
+                placeholder="Your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="form-input"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <textarea
+                placeholder="Share your blessing or memory..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className="form-textarea"
+                rows="3"
+                required
+              />
+            </div>
+            <button type="submit" className="submit-btn">
+              ✨ Add Blessing
+            </button>
+          </form>
+          
+          <div className="comments-list">
+            <h3>Blessings & Messages ({comments.length})</h3>
+            <div className="comments">
+              {comments.map(comment => (
+                <div key={comment.id} className="comment-card">
+                  <div className="comment-avatar">{comment.avatar}</div>
+                  <div className="comment-content">
+                    <div className="comment-header">
+                      <strong>{comment.name}</strong>
+                      <span className="comment-date">{comment.timestamp}</span>
+                    </div>
+                    <p className="comment-message">{comment.message}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
