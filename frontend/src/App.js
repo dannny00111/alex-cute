@@ -863,15 +863,9 @@ const ChristeningLandingPage = () => {
               <div className="preview-image">
                 <img src="https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg" alt="Naming ceremony celebration" />
                 <div className="preview-overlay">
-                  <div className="preview-stats">
-                    <div className="stat">
-                      <span className="stat-number">{getTotalCount().photos}</span>
-                      <span className="stat-label">Photos</span>
-                    </div>
-                    <div className="stat">
-                      <span className="stat-number">{getTotalCount().videos}</span>
-                      <span className="stat-label">Videos</span>
-                    </div>
+                  <div className="preview-message">
+                    <p className="preview-text">✨ Sacred memories await your discovery ✨</p>
+                    <p className="preview-subtitle">Witness the divine moments of Alexandra's naming ceremony</p>
                   </div>
                 </div>
               </div>
