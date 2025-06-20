@@ -25,8 +25,45 @@ const ChristeningLandingPage = () => {
     }, 1000);
   };
 
-  const handleGoogleDriveAccess = () => {
+  const [selectedMedia, setSelectedMedia] = useState(null);
+  const [showLightbox, setShowLightbox] = useState(false);
+
+  // Sample media data - in production, this would come from Google Drive API
+  const mediaData = {
+    photos: [
+      { id: 1, title: "Alexandra's Arrival", thumbnail: "https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg", type: "photo", driveId: "sample1" },
+      { id: 2, title: "Family Gathering", thumbnail: "https://images.pexels.com/photos/2088142/pexels-photo-2088142.jpeg", type: "photo", driveId: "sample2" },
+      { id: 3, title: "Sacred Moment", thumbnail: "https://images.unsplash.com/photo-1517209666778-f9c85dcf35b1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwyfHxzb2Z0JTIwcGluayUyMGZsb3dlcnN8ZW58MHx8fHwxNzUwMzc4MTg5fDA&ixlib=rb-4.1.0&q=85", type: "photo", driveId: "sample3" },
+      { id: 4, title: "Blessed Water", thumbnail: "https://images.unsplash.com/photo-1685432181990-e5c5c284c457?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODB8MHwxfHNlYXJjaHwzfHxiYWJ5JTIwYmxlc3NpbmclMjBjZXJlbW9ueXxlbnwwfHx8fDE3NTAzNzgxODN8MA&ixlib=rb-4.1.0&q=85", type: "photo", driveId: "sample4" },
+      { id: 5, title: "Family Love", thumbnail: "https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg", type: "photo", driveId: "sample5" },
+      { id: 6, title: "Heavenly Smile", thumbnail: "https://images.pexels.com/photos/2088142/pexels-photo-2088142.jpeg", type: "photo", driveId: "sample6" }
+    ],
+    videos: [
+      { id: 7, title: "Christening Ceremony", thumbnail: "https://images.unsplash.com/photo-1685432181990-e5c5c284c457?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODB8MHwxfHNlYXJjaHwzfHxiYWJ5JTIwYmxlc3NpbmclMjBjZXJlbW9ueXxlbnwwfHx8fDE3NTAzNzgxODN8MA&ixlib=rb-4.1.0&q=85", type: "video", duration: "3:45", driveId: "video1" },
+      { id: 8, title: "First Blessing", thumbnail: "https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg", type: "video", duration: "2:12", driveId: "video2" },
+      { id: 9, title: "Family Celebration", thumbnail: "https://images.unsplash.com/photo-1517209666778-f9c85dcf35b1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwyfHxzb2Z0JTIwcGluayUyMGZsb3dlcnN8ZW58MHx8fHwxNzUwMzc4MTg5fDA&ixlib=rb-4.1.0&q=85", type: "video", duration: "5:30", driveId: "video3" }
+    ]
+  };
+
+  const handleMediaClick = (media) => {
+    setSelectedMedia(media);
+    setShowLightbox(true);
+  };
+
+  const handleDownload = (media) => {
+    // In production, this would trigger download from Google Drive
+    const driveDownloadUrl = `https://drive.google.com/uc?export=download&id=${media.driveId}`;
+    window.open(driveDownloadUrl, '_blank');
+  };
+
+  const handleViewInDrive = () => {
     window.open('https://drive.google.com/drive/folders/1sk7C-nQPr2yfFtbpQGjFO1OPlXp9HPB9', '_blank');
+  };
+
+  const getFilteredMedia = () => {
+    if (activeTab === 'photos') return mediaData.photos;
+    if (activeTab === 'videos') return mediaData.videos;
+    return [...mediaData.photos, ...mediaData.videos];
   };
 
   if (!isAuthenticated) {
