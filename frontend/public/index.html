@@ -84,8 +84,124 @@
         </script>
     </head>
     <body>
-        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <noscript>
+            <div style="text-align: center; padding: 2rem; font-family: Arial, sans-serif;">
+                <h1>✨ Alexandra's Heavenly Blessing ✨</h1>
+                <p>You need to enable JavaScript to experience this beautiful gallery of sacred memories.</p>
+                <p>Please enable JavaScript in your browser and refresh the page.</p>
+            </div>
+        </noscript>
         <div id="root"></div>
+        
+        <!-- Service Worker Registration -->
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js')
+                        .then(function(registration) {
+                            console.log('SW registered: ', registration);
+                            
+                            // Check for updates
+                            registration.addEventListener('updatefound', () => {
+                                const newWorker = registration.installing;
+                                newWorker.addEventListener('statechange', () => {
+                                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                        // New content available, show update notification
+                                        if (confirm('New blessed memories are available! Refresh to see the latest updates?')) {
+                                            window.location.reload();
+                                        }
+                                    }
+                                });
+                            });
+                        })
+                        .catch(function(registrationError) {
+                            console.log('SW registration failed: ', registrationError);
+                        });
+                });
+            }
+            
+            // Install prompt for PWA
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                
+                // Show install button after user interacts with the site
+                setTimeout(() => {
+                    if (deferredPrompt && !window.matchMedia('(display-mode: standalone)').matches) {
+                        const installBanner = document.createElement('div');
+                        installBanner.innerHTML = `
+                            <div style="
+                                position: fixed;
+                                top: 20px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: linear-gradient(135deg, #F48FB1, #D63384);
+                                color: white;
+                                padding: 1rem 2rem;
+                                border-radius: 12px;
+                                box-shadow: 0 8px 20px rgba(248, 187, 217, 0.4);
+                                z-index: 10000;
+                                display: flex;
+                                align-items: center;
+                                gap: 1rem;
+                                font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+                                font-size: 14px;
+                                animation: slideDown 0.5s ease-out;
+                            ">
+                                <span>📱 Install Alexandra's Christening for the best experience!</span>
+                                <button onclick="installPWA()" style="
+                                    background: rgba(255, 255, 255, 0.2);
+                                    border: 1px solid rgba(255, 255, 255, 0.3);
+                                    color: white;
+                                    padding: 0.5rem 1rem;
+                                    border-radius: 8px;
+                                    cursor: pointer;
+                                    font-size: 12px;
+                                ">Install</button>
+                                <button onclick="this.parentElement.parentElement.remove()" style="
+                                    background: none;
+                                    border: none;
+                                    color: white;
+                                    cursor: pointer;
+                                    font-size: 16px;
+                                    padding: 0.5rem;
+                                ">×</button>
+                            </div>
+                        `;
+                        document.body.appendChild(installBanner);
+                    }
+                }, 5000);
+            });
+            
+            window.installPWA = async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        console.log('PWA installed successfully! ✨');
+                    }
+                    deferredPrompt = null;
+                    document.querySelector('[onclick="installPWA()"]').parentElement.parentElement.remove();
+                }
+            };
+            
+            // Add slideDown animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideDown {
+                    from {
+                        opacity: 0;
+                        transform: translateX(-50%) translateY(-20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateX(-50%) translateY(0);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        </script>
         <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
