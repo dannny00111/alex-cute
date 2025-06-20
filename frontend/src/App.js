@@ -358,11 +358,29 @@ const ChristeningLandingPage = () => {
         }
       });
       
-      setMediaData({ photos, videos });
+      // Add the additional gallery video
+      const additionalVideo = {
+        id: GALLERY_VIDEO_ID,
+        title: "Special Ceremony Moments",
+        thumbnail: `https://drive.google.com/thumbnail?id=${GALLERY_VIDEO_ID}`,
+        type: 'video',
+        driveId: GALLERY_VIDEO_ID,
+        mimeType: 'video/mp4',
+        downloadUrl: GALLERY_VIDEO_URL,
+        viewUrl: `https://drive.google.com/file/d/${GALLERY_VIDEO_ID}/view`,
+        aspectRatio: 'wide'
+      };
+      videos.push(additionalVideo);
+      
+      // Shuffle both photos and videos for each page load
+      const shuffledPhotos = shuffleArray(photos);
+      const shuffledVideos = shuffleArray(videos);
+      
+      setMediaData({ photos: shuffledPhotos, videos: shuffledVideos });
       
       // Initialize reactions for each media item
       const initialReactions = {};
-      [...photos, ...videos].forEach(item => {
+      [...shuffledPhotos, ...shuffledVideos].forEach(item => {
         initialReactions[item.id] = { hearts: 0, blessings: 0, prayers: 0 };
       });
       setMediaReactions(initialReactions);
@@ -382,13 +400,28 @@ const ChristeningLandingPage = () => {
       ];
       const fallbackVideos = [
         { id: 9, title: "Ceremony Highlights", thumbnail: "https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg", type: "video", driveId: "sample9", aspectRatio: 'wide' },
-        { id: 10, title: "Family Celebration Video", thumbnail: "https://images.pexels.com/photos/2088142/pexels-photo-2088142.jpeg", type: "video", driveId: "sample10", aspectRatio: 'wide' }
+        { id: 10, title: "Family Celebration Video", thumbnail: "https://images.pexels.com/photos/2088142/pexels-photo-2088142.jpeg", type: "video", driveId: "sample10", aspectRatio: 'wide' },
+        { 
+          id: GALLERY_VIDEO_ID, 
+          title: "Special Ceremony Moments", 
+          thumbnail: `https://drive.google.com/thumbnail?id=${GALLERY_VIDEO_ID}`, 
+          type: "video", 
+          driveId: GALLERY_VIDEO_ID, 
+          aspectRatio: 'wide',
+          downloadUrl: GALLERY_VIDEO_URL,
+          viewUrl: `https://drive.google.com/file/d/${GALLERY_VIDEO_ID}/view`
+        }
       ];
-      setMediaData({ photos: fallbackPhotos, videos: fallbackVideos });
+      
+      // Apply shuffling to fallback data as well
+      const shuffledFallbackPhotos = shuffleArray(fallbackPhotos);
+      const shuffledFallbackVideos = shuffleArray(fallbackVideos);
+      
+      setMediaData({ photos: shuffledFallbackPhotos, videos: shuffledFallbackVideos });
       
       // Initialize reactions for fallback data
       const initialReactions = {};
-      [...fallbackPhotos, ...fallbackVideos].forEach(item => {
+      [...shuffledFallbackPhotos, ...shuffledFallbackVideos].forEach(item => {
         initialReactions[item.id] = { hearts: Math.floor(Math.random() * 20), blessings: Math.floor(Math.random() * 15), prayers: Math.floor(Math.random() * 12) };
       });
       setMediaReactions(initialReactions);
