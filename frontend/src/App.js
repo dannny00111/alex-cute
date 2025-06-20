@@ -629,11 +629,7 @@ const ChristeningLandingPage = () => {
   if (!isAuthenticated) {
     return (
       <div className={`password-screen ${darkMode ? 'dark-mode' : ''}`}>
-<<<<<<< HEAD
-        {/* Background Video for Password Screen */}
-=======
         {/* Background Video */}
->>>>>>> origin/background-video-access-code-page-remove-immersive-view-sacred-memories
         <video 
           className="password-video-background"
           autoPlay
