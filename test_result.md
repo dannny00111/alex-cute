@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-## user_problem_statement: "Remove '90 photos and 10 videos' section, add Google Drive background video to access code page and home page, make page collapsible with dropdowns to reduce scrolling, ensure Netlify deployment compatibility"
+## user_problem_statement: "Remove made with emergent floater on the bottom right and Merge all branches together and ensure that this is deployable as a pwa via netlify or vercel. Only two buttons is needed on each grid which is full viewing ability of the images or video on full screen and forward right or left arrow should be able to help navigation and the second button should be to download the image or video and allow for mark multiple for download to photos app and the initial page after entering access code isn't showing a readable content. Lastly break all images into one collapsible dropdown and same for videos"
 
 ## backend:
 ##   - task: "Backend API Setup"
