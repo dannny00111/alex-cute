@@ -45,7 +45,7 @@ const ChristeningLandingPage = () => {
   const testimonialsRef = useRef(null);
   const photoViewerRef = useRef(null);
   const collageCanvasRef = useRef(null);
-  const videoRef = useRef(null);
+  const backgroundVideoRef = useRef(null);
 
   // Google Drive API configuration
   const FOLDER_ID = "1sk7C-nQPr2yfFtbpQGjFO1OPlXp9HPB9";
