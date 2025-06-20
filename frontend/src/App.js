@@ -660,7 +660,7 @@ const ChristeningLandingPage = () => {
   }
 
   return (
-    <div className="landing-page">
+    <div className={`landing-page ${darkMode ? 'dark-mode' : ''}`}>
       {/* Dynamic Background */}
       <div className="dynamic-background"></div>
 
@@ -714,6 +714,9 @@ const ChristeningLandingPage = () => {
             <button onClick={toggleTimeline} className="nav-item" title="Timeline">⏰</button>
             <button onClick={toggleCollageBuilder} className="nav-item" title="Collage">🎨</button>
             {!isMobile && <button onClick={toggle3DMode} className="nav-item" title="3D Mode">🎭</button>}
+            <button onClick={toggleDarkMode} className="nav-item" title={darkMode ? 'Light Mode' : 'Dark Mode'}>
+              {darkMode ? '☀️' : '🌙'}
+            </button>
           </div>
         </nav>
       )}
