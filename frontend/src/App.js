@@ -906,9 +906,9 @@ const ChristeningLandingPage = () => {
                     <div className="timeline-dot"></div>
                     <h3>{item.icon} {item.title}</h3>
                     <p className="timeline-time">{item.time}</p>
-                    {!collapsedSections.timeline && (
+                    <div className={`collapsible-content ${collapsedSections.timeline ? 'collapsed' : 'expanded'}`}>
                       <p>{item.description}</p>
-                    )}
+                    </div>
                   </div>
                 </div>
               ))}
