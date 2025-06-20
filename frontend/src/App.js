@@ -583,6 +583,21 @@ const ChristeningLandingPage = () => {
   if (!isAuthenticated) {
     return (
       <div className={`password-screen ${darkMode ? 'dark-mode' : ''}`}>
+        {/* Background Video for Password Screen */}
+        <video 
+          className="password-video-background"
+          autoPlay
+          muted
+          loop
+          playsInline
+          onError={(e) => console.log('Password screen video load error:', e)}
+        >
+          <source src={BACKGROUND_VIDEO_URL} type="video/mp4" />
+        </video>
+        
+        {/* Video Overlay */}
+        <div className="password-video-overlay"></div>
+        
         {/* Dynamic Background */}
         <div className="dynamic-background"></div>
         
