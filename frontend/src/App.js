@@ -37,12 +37,12 @@ const ChristeningLandingPage = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   
-  // Collapsible sections state
+  // Collapsible sections state - start most sections collapsed for minimal view
   const [collapsedSections, setCollapsedSections] = useState({
-    galleryIntro: false,
-    testimonials: false,
+    galleryIntro: true,
+    testimonials: true,
     guestBook: false,
-    aboutNames: false,
+    aboutNames: true,
     timeline: false
   });
   
