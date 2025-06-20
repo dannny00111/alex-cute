@@ -33,6 +33,13 @@ const ChristeningLandingPage = () => {
     }, 1000);
   };
 
+  const getTotalCount = () => {
+    return {
+      photos: mediaData.photos.length,
+      videos: mediaData.videos.length
+    };
+  };
+
   // Load media from Google Drive
   const loadMediaFromDrive = async () => {
     setIsLoadingMedia(true);
