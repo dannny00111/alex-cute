@@ -50,7 +50,7 @@ const ChristeningLandingPage = () => {
   const API_KEY = "AIzaSyCMaBUGCG5oZUdoF1VZz-wKQehd_ktYA5I";
 
   // Video configuration
-  const BACKGROUND_VIDEO_ID = "1IWNvGhXP1LKhi_CR2y_LJsxy6ikQ9F7q";
+  const BACKGROUND_VIDEO_ID = "163rWffXF7pW38eBzRbaZz2yycHMkme_3";
   const BACKGROUND_VIDEO_URL = `https://drive.google.com/uc?export=download&id=${BACKGROUND_VIDEO_ID}`;
   
   // Additional video for gallery
@@ -583,6 +583,19 @@ const ChristeningLandingPage = () => {
   if (!isAuthenticated) {
     return (
       <div className={`password-screen ${darkMode ? 'dark-mode' : ''}`}>
+        {/* Background Video */}
+        <video 
+          className="password-video-background"
+          autoPlay
+          muted
+          loop
+          playsInline
+          onLoadedData={handleBackgroundVideoLoad}
+          onError={handleBackgroundVideoError}
+        >
+          <source src={BACKGROUND_VIDEO_URL} type="video/mp4" />
+        </video>
+        
         {/* Dynamic Background */}
         <div className="dynamic-background"></div>
         
@@ -774,18 +787,12 @@ const ChristeningLandingPage = () => {
               >
                 About Alexandra
               </button>
-              <button 
-                onClick={() => enterImmersiveMode(mediaData.photos[0])} 
-                className="hero-cta secondary"
-              >
-                Immersive View
-              </button>
             </div>
           </div>
         </div>
         <div className="scroll-indicator">
           <div className="scroll-arrow"></div>
-          <span>Scroll to explore sacred memories</span>
+          <span>Scroll to explore memories</span>
         </div>
       </section>
 
@@ -1019,16 +1026,7 @@ const ChristeningLandingPage = () => {
                             >
                               ⬇️
                             </button>
-                            <button 
-                              className="action-button" 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                enterImmersiveMode(media);
-                              }}
-                              title="Immersive View"
-                            >
-                              🎭
-                            </button>
+                            {/* Immersive View button removed */}
                             {showCollageBuilder && (
                               <button 
                                 className="action-button" 
@@ -1323,13 +1321,7 @@ const ChristeningLandingPage = () => {
                     >
                       ⌂
                     </button>
-                    <button 
-                      onClick={() => enterImmersiveMode(selectedMedia)} 
-                      className="zoom-control"
-                      title="Immersive"
-                    >
-                      🎭
-                    </button>
+                    {/* Immersive button removed */}
                   </div>
                 </div>
               )}
