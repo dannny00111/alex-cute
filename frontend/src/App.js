@@ -638,13 +638,16 @@ const ChristeningLandingPage = () => {
         <div className="password-overlay"></div>
         <div className="password-container">
           <div className="password-card">
-            {/* Dark Mode Toggle */}
+            {/* Enhanced Dark Mode Toggle */}
             <button 
               onClick={toggleDarkMode} 
               className="dark-mode-toggle"
               title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              aria-label={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
-              {darkMode ? '☀️' : '🌙'}
+              <span className="toggle-icon">
+                {darkMode ? '☀️' : '🌙'}
+              </span>
             </button>
             
             <div className="angel-icon">👼</div>
