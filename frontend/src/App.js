@@ -35,9 +35,6 @@ const ChristeningLandingPage = () => {
   const [showAboutSection, setShowAboutSection] = useState(false);
   const [showDetailsPanel, setShowDetailsPanel] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [videoPlaying, setVideoPlaying] = useState(true);
-  const [videoMuted, setVideoMuted] = useState(true);
-  const [showVideoControls, setShowVideoControls] = useState(false);
   
   // Refs for scroll animations and interactions
   const heroRef = useRef(null);
