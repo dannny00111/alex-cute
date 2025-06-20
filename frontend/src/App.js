@@ -923,12 +923,15 @@ const ChristeningLandingPage = () => {
               className="collapse-toggle"
               onClick={() => toggleSection('galleryIntro')}
               title={collapsedSections.galleryIntro ? 'Expand' : 'Collapse'}
+              aria-label={collapsedSections.galleryIntro ? 'Expand gallery introduction' : 'Collapse gallery introduction'}
             >
-              {collapsedSections.galleryIntro ? '⬇️' : '⬆️'}
+              <span className="toggle-arrow">
+                {collapsedSections.galleryIntro ? '⬇️' : '⬆️'}
+              </span>
             </button>
           </div>
           
-          {!collapsedSections.galleryIntro && (
+          <div className={`collapsible-content ${collapsedSections.galleryIntro ? 'collapsed' : 'expanded'}`}>
             <div className="intro-content">
               <p className="section-description">
                 Witness the divine moments of {ceremonyDetails.displayName}'s naming ceremony through our carefully curated collection 
@@ -940,14 +943,13 @@ const ChristeningLandingPage = () => {
                   <img src="https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg" alt="Naming ceremony celebration" />
                   <div className="preview-overlay">
                     <div className="preview-message">
-                      <p className="preview-text">✨ Sacred memories await your discovery ✨</p>
-                      <p className="preview-subtitle">Witness the divine moments of Alexandra's naming ceremony</p>
+                      <p className="preview-title">✨ Sacred memories await your discovery ✨</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </section>
 
