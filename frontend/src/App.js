@@ -58,13 +58,22 @@ const ChristeningLandingPage = () => {
 
   // Real ceremony details
   const ceremonyDetails = {
-    childName: "ALEXANDRA JESOLUTUMITOMISE ESTHER MOJOLAOLIWA ABEIOLASHEWA OLUWA ADUNNI",
+    childName: "ALEXANDRA JESUOLUWATOMISIN ESTHER MOJOLAOLUWA ADEOLA ABIMIFOLUWA ADUNNI",
     displayName: "Alexandra",
-    fullName: "Alexandra Jesolutumitomise Esther Mojolaoliwa Abeiolashewa Oluwa Adunni",
+    fullName: "Alexandra Jesuoluwatomisin Esther Mojolaoluwa Adeola Abimifoluwa Adunni",
     parents: "Mr & Mrs Emmanuel OSHO",
     dateOfBirth: "11th June 2025",
     ceremonyDate: "18th June 2025",
-    password: "Alexandra2025"
+    password: "Alexandra2025",
+    namesMeanings: [
+      { name: "Alexandra", meaning: "Defender of mankind" },
+      { name: "Jesuoluwatomisin", meaning: "Jesus is sufficient for me to serve" },
+      { name: "Esther", meaning: "Star" },
+      { name: "Mojolaoluwa", meaning: "I enjoy the wealth of the Lord" },
+      { name: "Adeola", meaning: "Crown of wealth" },
+      { name: "Abimifoluwa", meaning: "I was born for God" },
+      { name: "Adunni", meaning: "Sweet to have" }
+    ]
   };
 
   // Fisher-Yates shuffle algorithm
