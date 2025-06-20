@@ -71,6 +71,8 @@ body {
   font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 /* Enhanced Universal Transitions */
@@ -107,6 +109,94 @@ body {
   max-height: 2000px;
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Enhanced Dark Mode Styles */
+.dark-mode {
+  background: linear-gradient(135deg, var(--dark-bg-primary) 0%, var(--dark-bg-secondary) 100%);
+}
+
+.dark-mode body {
+  background: linear-gradient(135deg, var(--dark-bg-primary) 0%, var(--dark-bg-secondary) 100%);
+}
+
+/* Enhanced Toggle Button Styles */
+.dark-mode-toggle {
+  position: relative;
+  background: var(--background-light);
+  border: 2px solid var(--border-color);
+  border-radius: 50px;
+  width: 60px;
+  height: 30px;
+  cursor: pointer;
+  transition: all var(--transition-normal) var(--spring-bounce);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: var(--shadow-medium);
+  overflow: hidden;
+}
+
+.dark-mode-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-large);
+}
+
+.dark-mode-toggle:active {
+  transform: scale(0.95);
+}
+
+.dark-mode .dark-mode-toggle {
+  background: var(--dark-bg-secondary);
+  border-color: var(--dark-border);
+  box-shadow: 0 4px 15px var(--dark-shadow);
+}
+
+/* Toggle Animation */
+.dark-mode-toggle::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  background: var(--primary-pink);
+  border-radius: 50%;
+  transition: all var(--transition-normal) var(--spring-bounce);
+  transform: translateX(0);
+}
+
+.dark-mode .dark-mode-toggle::before {
+  transform: translateX(26px);
+  background: var(--dark-accent);
+}
+
+/* Enhanced Toggle Icon Animation */
+.dark-mode-toggle .toggle-icon {
+  position: relative;
+  z-index: 2;
+  transition: all var(--transition-normal);
+}
+
+.dark-mode-toggle:not(.dark-mode *) .toggle-icon {
+  animation: sunBounce 0.5s var(--spring-bounce);
+}
+
+.dark-mode .dark-mode-toggle .toggle-icon {
+  animation: moonSlide 0.5s var(--spring-bounce);
+}
+
+@keyframes sunBounce {
+  0% { transform: scale(0.8) rotate(-180deg); }
+  50% { transform: scale(1.2) rotate(-90deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes moonSlide {
+  0% { transform: scale(0.8) rotate(180deg); }
+  50% { transform: scale(1.2) rotate(90deg); }
+  100% { transform: scale(1) rotate(0deg); }
 }
 
 /* Dark Mode Styles */
