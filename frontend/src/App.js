@@ -37,6 +37,15 @@ const ChristeningLandingPage = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   
+  // Collapsible sections state
+  const [collapsedSections, setCollapsedSections] = useState({
+    galleryIntro: false,
+    testimonials: false,
+    guestBook: false,
+    aboutNames: false,
+    timeline: false
+  });
+  
   // Refs for scroll animations and interactions
   const heroRef = useRef(null);
   const galleryRef = useRef(null);
