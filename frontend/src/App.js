@@ -22,11 +22,7 @@ const ChristeningLandingPage = () => {
   // Refs
   const backgroundVideoRef = useRef(null);
 
-  // Google Drive API configuration
-  const FOLDER_ID = "1sk7C-nQPr2yfFtbpQGjFO1OPlXp9HPB9";
-  const API_KEY = "AIzaSyCMaBUGCG5oZUdoF1VZz-wKQehd_ktYA5I";
-
-  // Video configuration
+  // Static video configuration - no backend needed
   const BACKGROUND_VIDEO_ID = "1IWNvGhXP1LKhi_CR2y_LJsxy6ikQ9F7q";
   const BACKGROUND_VIDEO_URL = `https://drive.google.com/uc?export=download&id=${BACKGROUND_VIDEO_ID}`;
   
@@ -34,7 +30,7 @@ const ChristeningLandingPage = () => {
   const GALLERY_VIDEO_ID = "163rWffXF7pW38eBzRbaZz2yycHMkme_3";
   const GALLERY_VIDEO_URL = `https://drive.google.com/uc?export=download&id=${GALLERY_VIDEO_ID}`;
 
-  // Real ceremony details
+  // Real ceremony details - static data
   const ceremonyDetails = {
     childName: "ALEXANDRA JESUOLUWATOMISIN ESTHER MOJOLAOLUWA ADEOLA ABIMIFOLUWA ADUNNI",
     displayName: "Alexandra",
@@ -43,6 +39,72 @@ const ChristeningLandingPage = () => {
     dateOfBirth: "11th June 2025",
     ceremonyDate: "18th June 2025",
     password: "Alexandra2025"
+  };
+
+  // Static media data - all client-side, no backend API calls
+  const staticMediaData = {
+    photos: [
+      {
+        id: '1',
+        title: 'Sacred Naming Ceremony - Blessed Moment 1',
+        thumbnail: 'https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg?auto=compress&cs=tinysrgb&w=400',
+        fullSize: 'https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        type: 'photo'
+      },
+      {
+        id: '2',
+        title: 'Sacred Naming Ceremony - Family Joy',
+        thumbnail: 'https://images.pexels.com/photos/1166209/pexels-photo-1166209.jpeg?auto=compress&cs=tinysrgb&w=400',
+        fullSize: 'https://images.pexels.com/photos/1166209/pexels-photo-1166209.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        type: 'photo'
+      },
+      {
+        id: '3',
+        title: 'Sacred Naming Ceremony - Divine Blessing',
+        thumbnail: 'https://images.pexels.com/photos/1116302/pexels-photo-1116302.jpeg?auto=compress&cs=tinysrgb&w=400',
+        fullSize: 'https://images.pexels.com/photos/1116302/pexels-photo-1116302.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        type: 'photo'
+      },
+      {
+        id: '4',
+        title: 'Sacred Naming Ceremony - Precious Memories',
+        thumbnail: 'https://images.pexels.com/photos/1648377/pexels-photo-1648377.jpeg?auto=compress&cs=tinysrgb&w=400',
+        fullSize: 'https://images.pexels.com/photos/1648377/pexels-photo-1648377.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        type: 'photo'
+      },
+      {
+        id: '5',
+        title: 'Sacred Naming Ceremony - Beautiful Celebration',
+        thumbnail: 'https://images.pexels.com/photos/1181563/pexels-photo-1181563.jpeg?auto=compress&cs=tinysrgb&w=400',
+        fullSize: 'https://images.pexels.com/photos/1181563/pexels-photo-1181563.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        type: 'photo'
+      },
+      {
+        id: '6',
+        title: 'Sacred Naming Ceremony - Joyful Gathering',
+        thumbnail: 'https://images.pexels.com/photos/1058277/pexels-photo-1058277.jpeg?auto=compress&cs=tinysrgb&w=400',
+        fullSize: 'https://images.pexels.com/photos/1058277/pexels-photo-1058277.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        type: 'photo'
+      }
+    ],
+    videos: [
+      {
+        id: 'v1',
+        title: 'Special Ceremony Moments',
+        thumbnail: 'https://images.pexels.com/photos/1166209/pexels-photo-1166209.jpeg?auto=compress&cs=tinysrgb&w=400',
+        fullSize: GALLERY_VIDEO_URL,
+        type: 'video',
+        duration: '2:30'
+      },
+      {
+        id: 'v2',
+        title: 'Sacred Blessing Video',
+        thumbnail: 'https://images.pexels.com/photos/1648377/pexels-photo-1648377.jpeg?auto=compress&cs=tinysrgb&w=400',
+        fullSize: BACKGROUND_VIDEO_URL,
+        type: 'video',
+        duration: '1:45'
+      }
+    ]
   };
 
   // Fisher-Yates shuffle algorithm
@@ -67,79 +129,49 @@ const ChristeningLandingPage = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Load media from Google Drive
+  // Load static media data when authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      loadMediaFromDrive();
+      loadStaticMedia();
     }
   }, [isAuthenticated]);
 
-  const loadMediaFromDrive = async () => {
+  const loadStaticMedia = () => {
     setIsLoadingMedia(true);
     
-    try {
-      // Mock data for demonstration - replace with real Google Drive API calls
-      const mockPhotos = [
-        {
-          id: '1',
-          title: 'Sacred Naming Ceremony - Photo 1',
-          thumbnail: 'https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg',
-          fullSize: 'https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-          type: 'photo'
-        },
-        {
-          id: '2',
-          title: 'Sacred Naming Ceremony - Photo 2',
-          thumbnail: 'https://images.pexels.com/photos/1166209/pexels-photo-1166209.jpeg',
-          fullSize: 'https://images.pexels.com/photos/1166209/pexels-photo-1166209.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-          type: 'photo'
-        },
-        {
-          id: '3',
-          title: 'Sacred Naming Ceremony - Photo 3',
-          thumbnail: 'https://images.pexels.com/photos/1116302/pexels-photo-1116302.jpeg',
-          fullSize: 'https://images.pexels.com/photos/1116302/pexels-photo-1116302.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-          type: 'photo'
-        }
-      ];
-
-      const mockVideos = [
-        {
-          id: 'v1',
-          title: 'Special Ceremony Moments',
-          thumbnail: 'https://images.pexels.com/photos/1166209/pexels-photo-1166209.jpeg',
-          fullSize: GALLERY_VIDEO_URL,
-          type: 'video',
-          duration: '2:30'
-        }
-      ];
-
+    // Simulate loading delay for better UX
+    setTimeout(() => {
       // Shuffle the arrays for random order on each page load
-      const shuffledPhotos = shuffleArray(mockPhotos);
-      const shuffledVideos = shuffleArray(mockVideos);
+      const shuffledPhotos = shuffleArray(staticMediaData.photos);
+      const shuffledVideos = shuffleArray(staticMediaData.videos);
 
       setMediaData({
         photos: shuffledPhotos,
         videos: shuffledVideos
       });
-    } catch (error) {
-      console.error('Error loading media:', error);
-    } finally {
       setIsLoadingMedia(false);
-    }
+    }, 1000);
   };
 
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
-    if (password === ceremonyDetails.password) {
-      setIsAuthenticated(true);
-      setPassword('');
-    } else {
-      alert('Incorrect access code. Please try again.');
-    }
+    setIsLoading(true);
+    
+    // Simulate authentication delay
+    setTimeout(() => {
+      if (password === ceremonyDetails.password) {
+        setIsAuthenticated(true);
+        setPassword('');
+      } else {
+        alert('Incorrect access code. Please try again.');
+      }
+      setIsLoading(false);
+    }, 500);
   };
 
-  const handleMediaClick = (media, index = 0) => {
+  const handleMediaClick = (media) => {
+    const allMedia = [...mediaData.photos, ...mediaData.videos];
+    const index = allMedia.findIndex(item => item.id === media.id);
     setSelectedMedia(media);
     setLightboxIndex(index);
     setShowLightbox(true);
@@ -166,13 +198,20 @@ const ChristeningLandingPage = () => {
   };
 
   const handleDownload = (media) => {
-    const link = document.createElement('a');
-    link.href = media.fullSize;
-    link.download = media.title;
-    link.target = '_blank';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    try {
+      // For static deployment, we'll use a different approach
+      const link = document.createElement('a');
+      link.href = media.fullSize;
+      link.download = media.title;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      // Fallback: open in new tab if download fails
+      window.open(media.fullSize, '_blank', 'noopener,noreferrer');
+    }
   };
 
   const toggleSection = (section) => {
@@ -181,6 +220,24 @@ const ChristeningLandingPage = () => {
       [section]: !prev[section]
     }));
   };
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      if (showLightbox) {
+        if (e.key === 'ArrowLeft') {
+          navigateLightbox('prev');
+        } else if (e.key === 'ArrowRight') {
+          navigateLightbox('next');
+        } else if (e.key === 'Escape') {
+          closeLightbox();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [showLightbox, selectedMedia]);
 
   // Password Screen
   if (!isAuthenticated) {
@@ -194,6 +251,7 @@ const ChristeningLandingPage = () => {
           muted
           loop
           playsInline
+          poster="https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
         >
           <source src={BACKGROUND_VIDEO_URL} type="video/mp4" />
         </video>
@@ -218,11 +276,13 @@ const ChristeningLandingPage = () => {
                   placeholder="Enter access code"
                   className="password-input"
                   required
+                  autoComplete="off"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="password-toggle"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? '👁️' : '👁️‍🗨️'}
                 </button>
@@ -259,6 +319,7 @@ const ChristeningLandingPage = () => {
           muted
           loop
           playsInline
+          poster="https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
         >
           <source src={BACKGROUND_VIDEO_URL} type="video/mp4" />
         </video>
@@ -283,6 +344,14 @@ const ChristeningLandingPage = () => {
                 <span>Named: {ceremonyDetails.ceremonyDate}</span>
               </p>
             </div>
+            <div className="hero-actions">
+              <button 
+                onClick={() => document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' })}
+                className="hero-cta primary"
+              >
+                View Gallery
+              </button>
+            </div>
           </div>
         </div>
         <div className="scroll-indicator">
@@ -304,6 +373,8 @@ const ChristeningLandingPage = () => {
             <button 
               className="section-toggle"
               onClick={() => toggleSection('photos')}
+              aria-expanded={!collapsedSections.photos}
+              aria-controls="photos-content"
             >
               <span className="section-title">📸 All Photos ({mediaData.photos.length})</span>
               <span className="toggle-arrow">
@@ -311,7 +382,10 @@ const ChristeningLandingPage = () => {
               </span>
             </button>
             
-            <div className={`collapsible-content ${collapsedSections.photos ? 'collapsed' : 'expanded'}`}>
+            <div 
+              id="photos-content"
+              className={`collapsible-content ${collapsedSections.photos ? 'collapsed' : 'expanded'}`}
+            >
               {isLoadingMedia ? (
                 <div className="loading-gallery">
                   <div className="loading-spinner"></div>
@@ -323,12 +397,32 @@ const ChristeningLandingPage = () => {
                     <div 
                       key={photo.id} 
                       className="simple-media-item"
-                      onClick={() => handleMediaClick(photo, index)}
+                      onClick={() => handleMediaClick(photo)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          handleMediaClick(photo);
+                        }
+                      }}
+                      tabIndex={0}
+                      role="button"
+                      aria-label={`View ${photo.title}`}
                     >
-                      <img src={photo.thumbnail} alt={photo.title} loading="lazy" />
+                      <img 
+                        src={photo.thumbnail} 
+                        alt={photo.title} 
+                        loading="lazy"
+                        onError={(e) => {
+                          e.target.src = 'https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg?auto=compress&cs=tinysrgb&w=400';
+                        }}
+                      />
                       <div className="media-overlay">
                         <div className="simple-actions">
-                          <button className="action-btn view-btn" title="Full Screen View">
+                          <button 
+                            className="action-btn view-btn" 
+                            title="Full Screen View"
+                            aria-label="View in full screen"
+                          >
                             🔍
                           </button>
                           <button 
@@ -338,6 +432,7 @@ const ChristeningLandingPage = () => {
                               handleDownload(photo);
                             }}
                             title="Download"
+                            aria-label="Download image"
                           >
                             ⬇️
                           </button>
@@ -355,6 +450,8 @@ const ChristeningLandingPage = () => {
             <button 
               className="section-toggle"
               onClick={() => toggleSection('videos')}
+              aria-expanded={!collapsedSections.videos}
+              aria-controls="videos-content"
             >
               <span className="section-title">🎥 All Videos ({mediaData.videos.length})</span>
               <span className="toggle-arrow">
@@ -362,7 +459,10 @@ const ChristeningLandingPage = () => {
               </span>
             </button>
             
-            <div className={`collapsible-content ${collapsedSections.videos ? 'collapsed' : 'expanded'}`}>
+            <div 
+              id="videos-content"
+              className={`collapsible-content ${collapsedSections.videos ? 'collapsed' : 'expanded'}`}
+            >
               {isLoadingMedia ? (
                 <div className="loading-gallery">
                   <div className="loading-spinner"></div>
@@ -374,16 +474,36 @@ const ChristeningLandingPage = () => {
                     <div 
                       key={video.id} 
                       className="simple-media-item video-item"
-                      onClick={() => handleMediaClick(video, index)}
+                      onClick={() => handleMediaClick(video)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          handleMediaClick(video);
+                        }
+                      }}
+                      tabIndex={0}
+                      role="button"
+                      aria-label={`View ${video.title}`}
                     >
-                      <img src={video.thumbnail} alt={video.title} loading="lazy" />
+                      <img 
+                        src={video.thumbnail} 
+                        alt={video.title} 
+                        loading="lazy"
+                        onError={(e) => {
+                          e.target.src = 'https://images.pexels.com/photos/1166209/pexels-photo-1166209.jpeg?auto=compress&cs=tinysrgb&w=400';
+                        }}
+                      />
                       <div className="video-indicator">
                         <span className="play-icon">▶️</span>
                         <span className="duration">{video.duration || '0:00'}</span>
                       </div>
                       <div className="media-overlay">
                         <div className="simple-actions">
-                          <button className="action-btn view-btn" title="Full Screen View">
+                          <button 
+                            className="action-btn view-btn" 
+                            title="Full Screen View"
+                            aria-label="View video in full screen"
+                          >
                             🔍
                           </button>
                           <button 
@@ -393,6 +513,7 @@ const ChristeningLandingPage = () => {
                               handleDownload(video);
                             }}
                             title="Download"
+                            aria-label="Download video"
                           >
                             ⬇️
                           </button>
@@ -409,15 +530,35 @@ const ChristeningLandingPage = () => {
 
       {/* Lightbox Modal */}
       {showLightbox && selectedMedia && (
-        <div className="lightbox-overlay" onClick={closeLightbox}>
+        <div 
+          className="lightbox-overlay" 
+          onClick={closeLightbox}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="lightbox-title"
+        >
           <div className="lightbox-container" onClick={(e) => e.stopPropagation()}>
-            <button className="lightbox-close" onClick={closeLightbox}>×</button>
+            <button 
+              className="lightbox-close" 
+              onClick={closeLightbox}
+              aria-label="Close lightbox"
+            >
+              ×
+            </button>
             
             {/* Navigation Arrows */}
-            <button className="lightbox-nav lightbox-prev" onClick={() => navigateLightbox('prev')}>
+            <button 
+              className="lightbox-nav lightbox-prev" 
+              onClick={() => navigateLightbox('prev')}
+              aria-label="Previous media"
+            >
               ❮
             </button>
-            <button className="lightbox-nav lightbox-next" onClick={() => navigateLightbox('next')}>
+            <button 
+              className="lightbox-nav lightbox-next" 
+              onClick={() => navigateLightbox('next')}
+              aria-label="Next media"
+            >
               ❯
             </button>
             
@@ -427,6 +568,7 @@ const ChristeningLandingPage = () => {
                   controls 
                   className="lightbox-video"
                   src={selectedMedia.fullSize}
+                  aria-label={selectedMedia.title}
                 >
                   Your browser does not support the video tag.
                 </video>
@@ -435,16 +577,20 @@ const ChristeningLandingPage = () => {
                   src={selectedMedia.fullSize} 
                   alt={selectedMedia.title}
                   className="lightbox-image"
+                  onError={(e) => {
+                    e.target.src = selectedMedia.thumbnail;
+                  }}
                 />
               )}
             </div>
             
             <div className="lightbox-info">
-              <h3>{selectedMedia.title}</h3>
+              <h3 id="lightbox-title">{selectedMedia.title}</h3>
               <div className="lightbox-actions">
                 <button 
                   className="lightbox-download"
                   onClick={() => handleDownload(selectedMedia)}
+                  aria-label={`Download ${selectedMedia.title}`}
                 >
                   ⬇️ Download
                 </button>
@@ -458,6 +604,11 @@ const ChristeningLandingPage = () => {
       <style>
         {`
           #emergent-badge {
+            display: none !important;
+          }
+          
+          /* Ensure no backend references */
+          .backend-references {
             display: none !important;
           }
         `}
