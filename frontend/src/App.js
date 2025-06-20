@@ -827,19 +827,19 @@ const ChristeningLandingPage = () => {
             </div>
             <div className="hero-actions">
               <button 
-                onClick={() => scrollToSection('gallery')} 
+                onClick={(e) => handleButtonClick(() => scrollToSection('gallery'), e)}
                 className="hero-cta primary"
               >
                 View Gallery
               </button>
               <button 
-                onClick={toggleAboutSection} 
+                onClick={(e) => handleButtonClick(() => toggleAboutSection(), e)}
                 className="hero-cta secondary"
               >
                 About Alexandra
               </button>
               <button 
-                onClick={() => enterImmersiveMode(mediaData.photos[0])} 
+                onClick={(e) => handleButtonClick(() => enterImmersiveMode(mediaData.photos[0]), e)}
                 className="hero-cta secondary"
               >
                 Immersive View
