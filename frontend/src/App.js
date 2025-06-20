@@ -43,7 +43,9 @@ const ChristeningLandingPage = () => {
     testimonials: true,
     guestBook: false,
     aboutNames: true,
-    timeline: false
+    timeline: false,
+    photos: true,
+    videos: true
   });
   
   // Refs for scroll animations and interactions
