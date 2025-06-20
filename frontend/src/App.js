@@ -589,6 +589,14 @@ const ChristeningLandingPage = () => {
     setShowDetailsPanel(!showDetailsPanel);
   };
 
+  // Toggle collapsible sections
+  const toggleSection = (sectionName) => {
+    setCollapsedSections(prev => ({
+      ...prev,
+      [sectionName]: !prev[sectionName]
+    }));
+  };
+
   if (!isAuthenticated) {
     return (
       <div className={`password-screen ${darkMode ? 'dark-mode' : ''}`}>
