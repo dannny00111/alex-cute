@@ -582,7 +582,7 @@ const ChristeningLandingPage = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="password-screen">
+      <div className={`password-screen ${darkMode ? 'dark-mode' : ''}`}>
         {/* Dynamic Background */}
         <div className="dynamic-background"></div>
         
@@ -606,6 +606,15 @@ const ChristeningLandingPage = () => {
         <div className="password-overlay"></div>
         <div className="password-container">
           <div className="password-card">
+            {/* Dark Mode Toggle */}
+            <button 
+              onClick={toggleDarkMode} 
+              className="dark-mode-toggle"
+              title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {darkMode ? '☀️' : '🌙'}
+            </button>
+            
             <div className="angel-icon">👼</div>
             <h1 className="password-title">{ceremonyDetails.displayName}'s Naming Ceremony</h1>
             <p className="password-subtitle">Welcome to {ceremonyDetails.fullName}'s sacred naming ceremony</p>
