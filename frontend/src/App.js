@@ -299,7 +299,7 @@ const ChristeningLandingPage = () => {
             <div className="footer-access">
               <h4>Access Media Gallery</h4>
               <p>View and download all photos and videos from this blessed day</p>
-              <button onClick={handleGoogleDriveAccess} className="footer-button">
+              <button onClick={handleViewInDrive} className="footer-button">
                 Visit Gallery
               </button>
             </div>
