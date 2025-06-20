@@ -4,6 +4,7 @@ import json
 import os
 import sys
 from datetime import datetime
+import time
 
 # Get the backend URL from the frontend .env file
 def get_backend_url():
@@ -31,7 +32,9 @@ def run_tests():
         "root_endpoint": False,
         "status_post": False,
         "status_get": False,
-        "mongodb_connection": False
+        "mongodb_connection": False,
+        "error_handling": False,
+        "performance": False
     }
     
     # Test 1: Check if server is responding
@@ -96,11 +99,60 @@ def run_tests():
     except Exception as e:
         print(f"❌ GET /status test error: {e}")
     
+    # Test 5: Error handling - Test with invalid data
+    try:
+        # Send invalid data (missing required field)
+        response = requests.post(
+            f"{api_url}/status", 
+            json={},  # Missing client_name field
+            timeout=10
+        )
+        
+        # Should return a 422 Unprocessable Entity for validation error
+        if response.status_code == 422:
+            test_results["error_handling"] = True
+            print("✅ Error handling working correctly (validation error)")
+        else:
+            print(f"❌ Error handling test failed: {response.status_code}, {response.text}")
+    except Exception as e:
+        print(f"❌ Error handling test error: {e}")
+    
+    # Test 6: Performance test - Multiple requests
+    try:
+        start_time = time.time()
+        num_requests = 5
+        success_count = 0
+        
+        for i in range(num_requests):
+            client_name = f"perf_test_client_{i}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
+            response = requests.post(
+                f"{api_url}/status", 
+                json={"client_name": client_name},
+                timeout=10
+            )
+            if response.status_code == 200:
+                success_count += 1
+        
+        end_time = time.time()
+        avg_time = (end_time - start_time) / num_requests
+        
+        if success_count == num_requests and avg_time < 1.0:  # Less than 1 second per request
+            test_results["performance"] = True
+            print(f"✅ Performance test passed: {avg_time:.2f} seconds per request")
+        else:
+            print(f"❌ Performance test issues: {success_count}/{num_requests} successful, {avg_time:.2f} seconds per request")
+    except Exception as e:
+        print(f"❌ Performance test error: {e}")
+    
     # Print summary
     print("\n=== TEST SUMMARY ===")
     for test, result in test_results.items():
         status = "✅ PASS" if result else "❌ FAIL"
         print(f"{status}: {test}")
+    
+    # Overall assessment
+    all_passed = all(test_results.values())
+    print(f"\n{'✅ ALL TESTS PASSED' if all_passed else '❌ SOME TESTS FAILED'}")
     
     return test_results
 
