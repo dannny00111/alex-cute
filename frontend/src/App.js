@@ -35,23 +35,76 @@ const ChristeningLandingPage = () => {
 
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [showLightbox, setShowLightbox] = useState(false);
+  const [mediaData, setMediaData] = useState({ photos: [], videos: [] });
+  const [isLoadingMedia, setIsLoadingMedia] = useState(false);
 
-  // Sample media data - in production, this would come from Google Drive API
-  const mediaData = {
-    photos: [
-      { id: 1, title: "Alexandra's Arrival", thumbnail: "https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg", type: "photo", driveId: "sample1" },
-      { id: 2, title: "Family Gathering", thumbnail: "https://images.pexels.com/photos/2088142/pexels-photo-2088142.jpeg", type: "photo", driveId: "sample2" },
-      { id: 3, title: "Sacred Moment", thumbnail: "https://images.unsplash.com/photo-1517209666778-f9c85dcf35b1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwyfHxzb2Z0JTIwcGluayUyMGZsb3dlcnN8ZW58MHx8fHwxNzUwMzc4MTg5fDA&ixlib=rb-4.1.0&q=85", type: "photo", driveId: "sample3" },
-      { id: 4, title: "Blessed Water", thumbnail: "https://images.unsplash.com/photo-1685432181990-e5c5c284c457?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODB8MHwxfHNlYXJjaHwzfHxiYWJ5JTIwYmxlc3NpbmclMjBjZXJlbW9ueXxlbnwwfHx8fDE3NTAzNzgxODN8MA&ixlib=rb-4.1.0&q=85", type: "photo", driveId: "sample4" },
-      { id: 5, title: "Family Love", thumbnail: "https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg", type: "photo", driveId: "sample5" },
-      { id: 6, title: "Heavenly Smile", thumbnail: "https://images.pexels.com/photos/2088142/pexels-photo-2088142.jpeg", type: "photo", driveId: "sample6" }
-    ],
-    videos: [
-      { id: 7, title: "Christening Ceremony", thumbnail: "https://images.unsplash.com/photo-1685432181990-e5c5c284c457?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODB8MHwxfHNlYXJjaHwzfHxiYWJ5JTIwYmxlc3NpbmclMjBjZXJlbW9ueXxlbnwwfHx8fDE3NTAzNzgxODN8MA&ixlib=rb-4.1.0&q=85", type: "video", duration: "3:45", driveId: "video1" },
-      { id: 8, title: "First Blessing", thumbnail: "https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg", type: "video", duration: "2:12", driveId: "video2" },
-      { id: 9, title: "Family Celebration", thumbnail: "https://images.unsplash.com/photo-1517209666778-f9c85dcf35b1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwyfHxzb2Z0JTIwcGluayUyMGZsb3dlcnN8ZW58MHx8fHwxNzUwMzc4MTg5fDA&ixlib=rb-4.1.0&q=85", type: "video", duration: "5:30", driveId: "video3" }
-    ]
+  // Google Drive API configuration
+  const FOLDER_ID = "1sk7C-nQPr2yfFtbpQGjFO1OPlXp9HPB9";
+  const API_KEY = "AIzaSyCMaBUGCG5oZUdoF1VZz-wKQehd_ktYA5I";
+
+  // Load media from Google Drive
+  const loadMediaFromDrive = async () => {
+    setIsLoadingMedia(true);
+    try {
+      const response = await fetch(
+        `https://www.googleapis.com/drive/v3/files` +
+        `?q='${FOLDER_ID}'+in+parents&key=${API_KEY}` +
+        `&fields=files(id,name,mimeType,thumbnailLink,size,createdTime)`
+      );
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch media from Google Drive');
+      }
+      
+      const { files } = await response.json();
+      
+      const photos = [];
+      const videos = [];
+      
+      files.forEach((file, index) => {
+        const mediaItem = {
+          id: file.id,
+          title: file.name.replace(/\.[^/.]+$/, ""), // Remove file extension
+          thumbnail: file.thumbnailLink || `https://drive.google.com/thumbnail?id=${file.id}`,
+          type: file.mimeType.startsWith('video') ? 'video' : 'photo',
+          driveId: file.id,
+          mimeType: file.mimeType,
+          size: file.size,
+          createdTime: file.createdTime,
+          downloadUrl: `https://drive.google.com/uc?export=download&id=${file.id}`,
+          viewUrl: `https://drive.google.com/file/d/${file.id}/view`
+        };
+        
+        if (file.mimeType.startsWith('video')) {
+          videos.push(mediaItem);
+        } else if (file.mimeType.startsWith('image')) {
+          photos.push(mediaItem);
+        }
+      });
+      
+      setMediaData({ photos, videos });
+    } catch (error) {
+      console.error('Error loading media:', error);
+      // Fallback to sample data if API fails
+      setMediaData({
+        photos: [
+          { id: 1, title: "Loading your photos...", thumbnail: "https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg", type: "photo", driveId: "sample1" },
+        ],
+        videos: [
+          { id: 2, title: "Loading your videos...", thumbnail: "https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg", type: "video", driveId: "sample2" },
+        ]
+      });
+    } finally {
+      setIsLoadingMedia(false);
+    }
   };
+
+  // Load media when authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadMediaFromDrive();
+    }
+  }, [isAuthenticated]);
 
   const handleMediaClick = (media) => {
     setSelectedMedia(media);
