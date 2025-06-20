@@ -221,11 +221,11 @@ const ChristeningLandingPage = () => {
                 <div className="preview-overlay">
                   <div className="preview-stats">
                     <div className="stat">
-                      <span className="stat-number">47</span>
+                      <span className="stat-number">{getTotalCount().photos}</span>
                       <span className="stat-label">Photos</span>
                     </div>
                     <div className="stat">
-                      <span className="stat-number">12</span>
+                      <span className="stat-number">{getTotalCount().videos}</span>
                       <span className="stat-label">Videos</span>
                     </div>
                   </div>
