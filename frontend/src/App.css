@@ -927,37 +927,6 @@ body {
   z-index: -1;
 }
 
-/* Video Controls */
-.video-controls {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  z-index: 3;
-  display: flex;
-  gap: 0.5rem;
-}
-
-.video-control-btn {
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  font-size: 0.9rem;
-}
-
-.video-control-btn:hover {
-  background: rgba(0, 0, 0, 0.9);
-  transform: scale(1.1);
-}
-
 /* Fallback Image */
 .hero-background-fallback {
   position: absolute;
