@@ -887,9 +887,12 @@ const ChristeningLandingPage = () => {
                 <button 
                   className="collapse-toggle"
                   onClick={() => toggleSection('timeline')}
-                  title={collapsedSections.timeline ? 'Expand Details' : 'Collapse Details'}
+                  title={collapsedSections.timeline ? 'Expand Timeline Details' : 'Collapse Timeline Details'}
+                  aria-label={collapsedSections.timeline ? 'Expand timeline details' : 'Collapse timeline details'}
                 >
-                  {collapsedSections.timeline ? '⬇️' : '⬆️'}
+                  <span className="toggle-arrow">
+                    {collapsedSections.timeline ? '⬇️' : '⬆️'}
+                  </span>
                 </button>
                 <button className="close-section-btn" onClick={toggleTimeline}>×</button>
               </div>
