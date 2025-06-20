@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './App.css';
 
 const ChristeningLandingPage = () => {
@@ -20,10 +20,25 @@ const ChristeningLandingPage = () => {
   const [galleryLayout, setGalleryLayout] = useState('masonry');
   const [showStoryMode, setShowStoryMode] = useState(false);
   
-  // Refs for scroll animations
+  // ================== NEW CRAZY FEATURES STATE ==================
+  const [particles, setParticles] = useState([]);
+  const [showImmersiveMode, setShowImmersiveMode] = useState(false);
+  const [immersiveMedia, setImmersiveMedia] = useState(null);
+  const [photoViewerState, setPhotoViewerState] = useState({ zoom: 1, x: 0, y: 0 });
+  const [cursorTrails, setCursorTrails] = useState([]);
+  const [showTimeline, setShowTimeline] = useState(false);
+  const [timelineItems, setTimelineItems] = useState([]);
+  const [showCollageBuilder, setShowCollageBuilder] = useState(false);
+  const [collageItems, setCollageItems] = useState([]);
+  const [gallery3DMode, setGallery3DMode] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  
+  // Refs for scroll animations and interactions
   const heroRef = useRef(null);
   const galleryRef = useRef(null);
   const testimonialsRef = useRef(null);
+  const photoViewerRef = useRef(null);
+  const collageCanvasRef = useRef(null);
 
   // Google Drive API configuration
   const FOLDER_ID = "1sk7C-nQPr2yfFtbpQGjFO1OPlXp9HPB9";
@@ -31,6 +46,152 @@ const ChristeningLandingPage = () => {
 
   // Simple password check (in production, this should be server-side)
   const correctPassword = 'Alexandra2024';
+
+  // ================== NEW CRAZY FEATURES FUNCTIONS ==================
+
+  // Particle Animation System
+  const createParticle = useCallback(() => {
+    const particles = ['❤️', '✨', '👼', '🌸', '💕', '🙏', '💖'];
+    const types = ['heart', 'star', 'angel'];
+    return {
+      id: Date.now() + Math.random(),
+      emoji: particles[Math.floor(Math.random() * particles.length)],
+      type: types[Math.floor(Math.random() * types.length)],
+      x: Math.random() * window.innerWidth,
+      delay: Math.random() * 8
+    };
+  }, []);
+
+  // Initialize particles
+  useEffect(() => {
+    if (isAuthenticated) {
+      const initialParticles = Array.from({ length: 15 }, createParticle);
+      setParticles(initialParticles);
+      
+      const particleInterval = setInterval(() => {
+        setParticles(prev => {
+          const newParticles = [...prev];
+          if (newParticles.length < 20) {
+            newParticles.push(createParticle());
+          }
+          return newParticles.slice(-20); // Keep only latest 20 particles
+        });
+      }, 3000);
+
+      return () => clearInterval(particleInterval);
+    }
+  }, [isAuthenticated, createParticle]);
+
+  // Cursor Trail Effect
+  const handleMouseMove = useCallback((e) => {
+    if (isAuthenticated) {
+      const trail = {
+        id: Date.now(),
+        x: e.clientX,
+        y: e.clientY
+      };
+      setCursorTrails(prev => [...prev.slice(-10), trail]);
+      
+      setTimeout(() => {
+        setCursorTrails(prev => prev.filter(t => t.id !== trail.id));
+      }, 1000);
+    }
+  }, [isAuthenticated]);
+
+  // Photo Viewer Advanced Controls
+  const handlePhotoZoom = (direction) => {
+    setPhotoViewerState(prev => ({
+      ...prev,
+      zoom: Math.max(0.5, Math.min(3, prev.zoom + (direction * 0.25)))
+    }));
+  };
+
+  const handlePhotoPan = (deltaX, deltaY) => {
+    setPhotoViewerState(prev => ({
+      ...prev,
+      x: prev.x + deltaX,
+      y: prev.y + deltaY
+    }));
+  };
+
+  const resetPhotoViewer = () => {
+    setPhotoViewerState({ zoom: 1, x: 0, y: 0 });
+  };
+
+  // Immersive Mode Functions
+  const enterImmersiveMode = (media) => {
+    setImmersiveMedia(media);
+    setShowImmersiveMode(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const exitImmersiveMode = () => {
+    setShowImmersiveMode(false);
+    setImmersiveMedia(null);
+    document.body.style.overflow = 'auto';
+  };
+
+  // Timeline Functions
+  const initializeTimeline = () => {
+    const timelineData = [
+      {
+        id: 1,
+        title: "Pre-Ceremony Preparations",
+        description: "Getting ready with family, the anticipation and joy building up to this sacred moment.",
+        time: "Morning",
+        icon: "🌅"
+      },
+      {
+        id: 2,
+        title: "The Sacred Ceremony",
+        description: "Alexandra receives God's blessing in the beautiful church ceremony surrounded by loved ones.",
+        time: "Afternoon",
+        icon: "⛪"
+      },
+      {
+        id: 3,
+        title: "Family Celebration",
+        description: "Joyful celebration with family and friends, sharing in this blessed day.",
+        time: "Evening",
+        icon: "🎉"
+      },
+      {
+        id: 4,
+        title: "Precious Memories",
+        description: "Capturing every smile, every blessing, every moment of this divine day.",
+        time: "Throughout",
+        icon: "📸"
+      }
+    ];
+    setTimelineItems(timelineData);
+  };
+
+  // Collage Builder Functions
+  const addToCollage = (media) => {
+    const newItem = {
+      id: Date.now(),
+      media,
+      x: Math.random() * 60,
+      y: Math.random() * 60,
+      width: 80 + Math.random() * 40,
+      height: 80 + Math.random() * 40,
+      rotation: (Math.random() - 0.5) * 30
+    };
+    setCollageItems(prev => [...prev, newItem]);
+  };
+
+  const removeFromCollage = (id) => {
+    setCollageItems(prev => prev.filter(item => item.id !== id));
+  };
+
+  const clearCollage = () => {
+    setCollageItems([]);
+  };
+
+  const saveCollage = () => {
+    // In a real app, this would generate and download the collage
+    alert('Collage saved! ✨ (This would download the collage in a real implementation)');
+  };
 
   // Scroll progress and animations
   useEffect(() => {
@@ -47,18 +208,23 @@ const ChristeningLandingPage = () => {
       if (heroRef.current) {
         const heroBackground = heroRef.current.querySelector('.hero-background');
         if (heroBackground) {
-          heroBackground.style.transform = `translateY(${scrollTop * 0.5}px)`;
+          heroBackground.style.transform = `translateX(-10%) translateY(-10%) translateZ(0) scale(${1 + scrollTop * 0.0002})`;
         }
       }
       
-      // Animate elements on scroll
+      // Enhanced scroll animations with 3D effects
       const animateOnScroll = (elements) => {
         elements.forEach(el => {
           if (el) {
             const rect = el.getBoundingClientRect();
             const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+            const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / window.innerHeight));
+            
             if (isVisible) {
               el.classList.add('animate-in');
+              if (gallery3DMode) {
+                el.style.transform = `translateY(0) rotateY(${(progress - 0.5) * 10}deg) rotateX(${(progress - 0.5) * 5}deg)`;
+              }
             }
           }
         });
@@ -66,11 +232,24 @@ const ChristeningLandingPage = () => {
       
       const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
       animateOnScroll(elementsToAnimate);
+
+      // Timeline animation
+      const timelineElements = document.querySelectorAll('.timeline-item');
+      timelineElements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.8) {
+          el.classList.add('visible');
+        }
+      });
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [handleMouseMove, gallery3DMode]);
 
   // Load media from Google Drive
   const loadMediaFromDrive = async () => {
@@ -128,24 +307,38 @@ const ChristeningLandingPage = () => {
       const fallbackPhotos = [
         { id: 1, title: "Loading your photos...", thumbnail: "https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg", type: "photo", driveId: "sample1", aspectRatio: 'wide' },
         { id: 2, title: "Beautiful moments...", thumbnail: "https://images.pexels.com/photos/2088142/pexels-photo-2088142.jpeg", type: "photo", driveId: "sample2", aspectRatio: 'tall' },
+        { id: 3, title: "Sacred ceremony...", thumbnail: "https://images.pexels.com/photos/3551227/pexels-photo-3551227.jpeg", type: "photo", driveId: "sample3", aspectRatio: 'wide' },
+        { id: 4, title: "Family joy...", thumbnail: "https://images.pexels.com/photos/1648377/pexels-photo-1648377.jpeg", type: "photo", driveId: "sample4", aspectRatio: 'tall' },
+        { id: 5, title: "Divine blessings...", thumbnail: "https://images.pexels.com/photos/3617457/pexels-photo-3617457.jpeg", type: "photo", driveId: "sample5", aspectRatio: 'wide' },
+        { id: 6, title: "Precious memories...", thumbnail: "https://images.pexels.com/photos/3992949/pexels-photo-3992949.jpeg", type: "photo", driveId: "sample6", aspectRatio: 'tall' }
       ];
       const fallbackVideos = [
-        { id: 3, title: "Loading your videos...", thumbnail: "https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg", type: "video", driveId: "sample3", aspectRatio: 'wide' },
+        { id: 7, title: "Ceremony highlights...", thumbnail: "https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg", type: "video", driveId: "sample7", aspectRatio: 'wide' },
+        { id: 8, title: "Family celebration...", thumbnail: "https://images.pexels.com/photos/2088142/pexels-photo-2088142.jpeg", type: "video", driveId: "sample8", aspectRatio: 'wide' }
       ];
       setMediaData({ photos: fallbackPhotos, videos: fallbackVideos });
+      
+      // Initialize reactions for fallback data
+      const initialReactions = {};
+      [...fallbackPhotos, ...fallbackVideos].forEach(item => {
+        initialReactions[item.id] = { hearts: Math.floor(Math.random() * 15), blessings: Math.floor(Math.random() * 10), prayers: Math.floor(Math.random() * 8) };
+      });
+      setMediaReactions(initialReactions);
     } finally {
       setIsLoadingMedia(false);
     }
   };
 
-  // Load media when authenticated
+  // Load media and initialize features when authenticated
   useEffect(() => {
     if (isAuthenticated) {
       loadMediaFromDrive();
+      initializeTimeline();
       // Initialize guest comments with sample data
       setGuestComments([
         { id: 1, name: "Grandma Rose", message: "What a blessed day! Alexandra looks like an angel.", timestamp: new Date().toLocaleDateString(), avatar: "👵" },
-        { id: 2, name: "Uncle John", message: "So proud to witness this sacred moment. Beautiful ceremony!", timestamp: new Date().toLocaleDateString(), avatar: "👨" }
+        { id: 2, name: "Uncle John", message: "So proud to witness this sacred moment. Beautiful ceremony!", timestamp: new Date().toLocaleDateString(), avatar: "👨" },
+        { id: 3, name: "Aunt Maria", message: "God's blessings are shining through every photo. Such a precious day!", timestamp: new Date().toLocaleDateString(), avatar: "👩" }
       ]);
     }
   }, [isAuthenticated]);
@@ -170,6 +363,7 @@ const ChristeningLandingPage = () => {
     setLightboxIndex(index);
     setSelectedMedia(media);
     setShowLightbox(true);
+    resetPhotoViewer();
   };
 
   const handleDownload = (media) => {
@@ -200,6 +394,7 @@ const ChristeningLandingPage = () => {
     if (newIndex >= allMedia.length) newIndex = 0;
     setLightboxIndex(newIndex);
     setSelectedMedia(allMedia[newIndex]);
+    resetPhotoViewer();
   };
 
   // Add reaction to media
@@ -233,9 +428,42 @@ const ChristeningLandingPage = () => {
     }
   };
 
+  // Toggle functions for new features
+  const toggleTimeline = () => {
+    setShowTimeline(!showTimeline);
+  };
+
+  const toggleCollageBuilder = () => {
+    setShowCollageBuilder(!showCollageBuilder);
+  };
+
+  const toggle3DMode = () => {
+    setGallery3DMode(!gallery3DMode);
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="password-screen">
+        {/* Dynamic Background */}
+        <div className="dynamic-background"></div>
+        
+        {/* Floating Particles */}
+        <div className="particles-container">
+          {Array.from({ length: 10 }).map((_, i) => (
+            <div
+              key={i}
+              className={`particle particle-${['heart', 'star', 'angel'][i % 3]}`}
+              style={{
+                left: `${Math.random() * 100}%`,
+                '--delay': `${Math.random() * 8}s`,
+                fontSize: `${0.8 + Math.random() * 0.8}rem`
+              }}
+            >
+              {['❤️', '✨', '👼'][i % 3]}
+            </div>
+          ))}
+        </div>
+
         <div className="password-overlay"></div>
         <div className="password-container">
           <div className="password-card">
@@ -284,6 +512,37 @@ const ChristeningLandingPage = () => {
 
   return (
     <div className="landing-page">
+      {/* Dynamic Background */}
+      <div className="dynamic-background"></div>
+
+      {/* Particle Animation System */}
+      <div className="particles-container">
+        {particles.map((particle) => (
+          <div
+            key={particle.id}
+            className={`particle particle-${particle.type}`}
+            style={{
+              left: `${particle.x}px`,
+              '--delay': `${particle.delay}s`
+            }}
+          >
+            {particle.emoji}
+          </div>
+        ))}
+      </div>
+
+      {/* Cursor Trail Effect */}
+      {cursorTrails.map((trail) => (
+        <div
+          key={trail.id}
+          className="cursor-trail"
+          style={{
+            left: trail.x - 10,
+            top: trail.y - 10
+          }}
+        />
+      ))}
+
       {/* Scroll Progress Bar */}
       <div className="scroll-progress-bar">
         <div 
@@ -292,14 +551,17 @@ const ChristeningLandingPage = () => {
         ></div>
       </div>
 
-      {/* Floating Navigation */}
+      {/* Enhanced Floating Navigation */}
       {showFloatingNav && (
         <nav className="floating-nav">
           <div className="nav-items">
-            <button onClick={() => scrollToSection('hero')} className="nav-item">Home</button>
-            <button onClick={() => scrollToSection('gallery')} className="nav-item">Gallery</button>
-            <button onClick={() => scrollToSection('testimonials')} className="nav-item">Messages</button>
-            <button onClick={() => setShowGuestBook(true)} className="nav-item">Guest Book</button>
+            <button onClick={() => scrollToSection('hero')} className="nav-item" title="Home">🏠</button>
+            <button onClick={() => scrollToSection('gallery')} className="nav-item" title="Gallery">📸</button>
+            <button onClick={() => scrollToSection('testimonials')} className="nav-item" title="Messages">💌</button>
+            <button onClick={() => setShowGuestBook(true)} className="nav-item" title="Guest Book">📖</button>
+            <button onClick={toggleTimeline} className="nav-item" title="Timeline">⏰</button>
+            <button onClick={toggleCollageBuilder} className="nav-item" title="Collage">🎨</button>
+            <button onClick={toggle3DMode} className="nav-item" title="3D Mode">🎭</button>
           </div>
         </nav>
       )}
@@ -330,6 +592,12 @@ const ChristeningLandingPage = () => {
               >
                 Story Mode
               </button>
+              <button 
+                onClick={() => enterImmersiveMode(mediaData.photos[0])} 
+                className="hero-cta secondary"
+              >
+                Immersive View
+              </button>
             </div>
           </div>
           <div className="hero-decoration">
@@ -345,6 +613,28 @@ const ChristeningLandingPage = () => {
         </div>
       </section>
 
+      {/* Interactive Memory Timeline */}
+      {showTimeline && (
+        <section className="memory-timeline">
+          <div className="container">
+            <h2 className="section-title animate-on-scroll">Sacred Journey Timeline</h2>
+            <div className="timeline-track">
+              <div className="timeline-line"></div>
+              {timelineItems.map((item, index) => (
+                <div key={item.id} className={`timeline-item ${index % 2 === 0 ? 'left' : 'right'}`}>
+                  <div className="timeline-content">
+                    <div className="timeline-dot"></div>
+                    <h3>{item.icon} {item.title}</h3>
+                    <p className="timeline-time">{item.time}</p>
+                    <p>{item.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Gallery Introduction */}
       <section className="gallery-intro animate-on-scroll">
         <div className="container">
@@ -355,7 +645,7 @@ const ChristeningLandingPage = () => {
               of photos and videos. Each image tells a story of love, faith, and heavenly blessings.
             </p>
             
-            <div className="gallery-preview">
+            <div className="gallery-preview hover-lift">
               <div className="preview-image">
                 <img src="https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg" alt="Christening celebration" />
                 <div className="preview-overlay">
@@ -376,7 +666,44 @@ const ChristeningLandingPage = () => {
         </div>
       </section>
 
-      {/* Media Gallery */}
+      {/* Photo Collage Builder */}
+      {showCollageBuilder && (
+        <section className="collage-builder animate-on-scroll">
+          <div className="container">
+            <h3>✨ Create Your Memory Collage</h3>
+            <div className="collage-canvas" ref={collageCanvasRef}>
+              {collageItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="collage-item"
+                  style={{
+                    left: `${item.x}%`,
+                    top: `${item.y}%`,
+                    width: `${item.width}px`,
+                    height: `${item.height}px`,
+                    transform: `rotate(${item.rotation}deg)`
+                  }}
+                  onClick={() => removeFromCollage(item.id)}
+                >
+                  <img src={item.media.thumbnail} alt={item.media.title} />
+                </div>
+              ))}
+              {collageItems.length === 0 && (
+                <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
+                  Click "Add to Collage" on any photo below to start creating your masterpiece!
+                </div>
+              )}
+            </div>
+            <div className="collage-controls">
+              <button onClick={clearCollage} className="collage-btn">Clear All</button>
+              <button onClick={saveCollage} className="collage-btn">Save Collage</button>
+              <button onClick={toggleCollageBuilder} className="collage-btn">Hide Builder</button>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Enhanced Media Gallery */}
       <section id="gallery" className="media-gallery" ref={galleryRef}>
         <div className="container">
           <div className="gallery-header animate-on-scroll">
@@ -417,6 +744,13 @@ const ChristeningLandingPage = () => {
                 >
                   ⋮⋮
                 </button>
+                <button 
+                  className={`layout-btn ${gallery3DMode ? 'active' : ''}`}
+                  onClick={toggle3DMode}
+                  title="3D Mode"
+                >
+                  🎭
+                </button>
               </div>
             </div>
           </div>
@@ -425,15 +759,17 @@ const ChristeningLandingPage = () => {
             <div className="integrated-gallery">
               {isLoadingMedia ? (
                 <div className="loading-gallery">
-                  <div className="loading-spinner large"></div>
+                  <div className="loading-advanced">
+                    <div className="loading-spinner-advanced"></div>
+                  </div>
                   <p>Loading Alexandra's precious memories...</p>
                 </div>
               ) : (
-                <div className={`gallery-grid ${galleryLayout}`}>
+                <div className={`gallery-grid ${galleryLayout} ${gallery3DMode ? 'gallery-3d-mode' : ''}`}>
                   {getFilteredMedia().map((media, index) => (
                     <div 
                       key={media.id} 
-                      className={`media-item ${media.aspectRatio} animate-on-scroll`}
+                      className={`media-item ${media.aspectRatio} ${gallery3DMode ? 'media-item-3d' : ''} animate-on-scroll hover-lift`}
                       style={{ animationDelay: `${index * 0.1}s` }}
                       onClick={() => handleMediaClick(media)}
                     >
@@ -464,6 +800,28 @@ const ChristeningLandingPage = () => {
                             >
                               ⬇️
                             </button>
+                            <button 
+                              className="action-button" 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                enterImmersiveMode(media);
+                              }}
+                              title="Immersive View"
+                            >
+                              🎭
+                            </button>
+                            {showCollageBuilder && (
+                              <button 
+                                className="action-button" 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  addToCollage(media);
+                                }}
+                                title="Add to Collage"
+                              >
+                                🎨
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -507,11 +865,19 @@ const ChristeningLandingPage = () => {
               
               <div className="gallery-footer">
                 <p className="gallery-note">
-                  💝 Click any image to view in full size • Click reactions to bless the moment
+                  💝 Click any image to view in full size • Use enhanced controls for zoom and pan • Try 3D mode!
                 </p>
-                <button onClick={handleViewInDrive} className="drive-access-button">
-                  View Original Google Drive Folder
-                </button>
+                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <button onClick={handleViewInDrive} className="drive-access-button">
+                    View Original Google Drive Folder
+                  </button>
+                  <button onClick={toggleTimeline} className="drive-access-button">
+                    {showTimeline ? 'Hide Timeline' : 'Show Timeline'}
+                  </button>
+                  <button onClick={toggleCollageBuilder} className="drive-access-button">
+                    {showCollageBuilder ? 'Hide Collage Builder' : 'Show Collage Builder'}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -525,7 +891,7 @@ const ChristeningLandingPage = () => {
           <h2 className="section-title white animate-on-scroll">Messages of Love</h2>
           
           <div className="testimonials-grid animate-on-scroll">
-            <div className="testimonial-card">
+            <div className="testimonial-card hover-lift">
               <div className="testimonial-quote">"</div>
               <p className="testimonial-text">
                 "What a beautiful and blessed day! Alexandra looked like an angel during her christening. 
@@ -539,7 +905,7 @@ const ChristeningLandingPage = () => {
               </div>
             </div>
 
-            <div className="testimonial-card">
+            <div className="testimonial-card hover-lift">
               <div className="testimonial-quote">"</div>
               <p className="testimonial-text">
                 "The ceremony was absolutely magical. Seeing Alexandra surrounded by so much love 
@@ -553,7 +919,7 @@ const ChristeningLandingPage = () => {
               </div>
             </div>
 
-            <div className="testimonial-card">
+            <div className="testimonial-card hover-lift">
               <div className="testimonial-quote">"</div>
               <p className="testimonial-text">
                 "God's blessings were evident throughout the entire celebration. Alexandra is 
@@ -622,13 +988,49 @@ const ChristeningLandingPage = () => {
               <div className="decoration-line"></div>
             </div>
             <p className="footer-copyright">
-              © 2024 Alexandra's Christening • Created with Love
+              © 2024 Alexandra's Christening • Created with Love • Enhanced with Magic ✨
             </p>
           </div>
         </div>
       </footer>
 
-      {/* Advanced Lightbox Modal */}
+      {/* Immersive Mode */}
+      {showImmersiveMode && immersiveMedia && (
+        <div className="immersive-mode" onClick={exitImmersiveMode}>
+          <div className="immersive-content" onClick={(e) => e.stopPropagation()}>
+            <img 
+              src={immersiveMedia.thumbnail} 
+              alt={immersiveMedia.title} 
+              className="immersive-image"
+            />
+            <div className="immersive-controls">
+              <button 
+                onClick={exitImmersiveMode}
+                className="immersive-btn"
+                title="Exit"
+              >
+                ✕
+              </button>
+              <button 
+                onClick={() => handleDownload(immersiveMedia)}
+                className="immersive-btn"
+                title="Download"
+              >
+                ⬇️
+              </button>
+              <button 
+                onClick={() => addReaction(immersiveMedia.id, 'hearts')}
+                className="immersive-btn"
+                title="Like"
+              >
+                ❤️
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Enhanced Lightbox Modal */}
       {showLightbox && selectedMedia && (
         <div className="lightbox-overlay advanced" onClick={() => setShowLightbox(false)}>
           <div className="lightbox-container advanced" onClick={(e) => e.stopPropagation()}>
@@ -671,7 +1073,46 @@ const ChristeningLandingPage = () => {
                   </div>
                 </div>
               ) : (
-                <img src={selectedMedia.thumbnail} alt={selectedMedia.title} className="lightbox-image" />
+                <div className="photo-viewer-advanced" ref={photoViewerRef}>
+                  <img 
+                    src={selectedMedia.thumbnail} 
+                    alt={selectedMedia.title} 
+                    className="photo-viewer-image lightbox-image" 
+                    style={{
+                      transform: `scale(${photoViewerState.zoom}) translate(${photoViewerState.x}px, ${photoViewerState.y}px)`
+                    }}
+                  />
+                  <div className="photo-viewer-controls">
+                    <button 
+                      onClick={() => handlePhotoZoom(1)} 
+                      className="zoom-control"
+                      title="Zoom In"
+                    >
+                      +
+                    </button>
+                    <button 
+                      onClick={() => handlePhotoZoom(-1)} 
+                      className="zoom-control"
+                      title="Zoom Out"
+                    >
+                      -
+                    </button>
+                    <button 
+                      onClick={resetPhotoViewer} 
+                      className="zoom-control"
+                      title="Reset"
+                    >
+                      ⌂
+                    </button>
+                    <button 
+                      onClick={() => enterImmersiveMode(selectedMedia)} 
+                      className="zoom-control"
+                      title="Immersive"
+                    >
+                      🎭
+                    </button>
+                  </div>
+                </div>
               )}
             </div>
             
@@ -694,6 +1135,11 @@ const ChristeningLandingPage = () => {
                 <button onClick={() => handleDownload(selectedMedia)} className="lightbox-download">
                   Download Original
                 </button>
+                {showCollageBuilder && (
+                  <button onClick={() => addToCollage(selectedMedia)} className="lightbox-download">
+                    Add to Collage
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -712,7 +1158,7 @@ const ChristeningLandingPage = () => {
   );
 };
 
-// Guest Book Modal Component
+// Enhanced Guest Book Modal Component
 const GuestBookModal = ({ onClose, comments, onAddComment }) => {
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
@@ -728,7 +1174,7 @@ const GuestBookModal = ({ onClose, comments, onAddComment }) => {
 
   return (
     <div className="guest-book-overlay" onClick={onClose}>
-      <div className="guest-book-modal" onClick={(e) => e.stopPropagation()}>
+      <div className="guest-book-modal hover-lift" onClick={(e) => e.stopPropagation()}>
         <div className="guest-book-header">
           <h2>📖 Guest Book</h2>
           <button onClick={onClose} className="close-btn">✕</button>
