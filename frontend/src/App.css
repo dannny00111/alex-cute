@@ -1032,7 +1032,121 @@ body.dark-mode .dark-mode-toggle {
   z-index: 1;
 }
 
-/* Fallback Background Image (shown when video fails to load) */
+/* Dark Mode Additional Styles */
+body.dark-mode .hero-video-overlay {
+  background: linear-gradient(135deg, rgba(30, 20, 25, 0.7) 0%, rgba(25, 15, 20, 0.6) 50%, rgba(20, 10, 15, 0.7) 100%);
+}
+
+body.dark-mode .hero-background.invitation-background {
+  background: linear-gradient(135deg, rgba(30, 20, 25, 0.9) 0%, rgba(25, 15, 20, 0.8) 50%, rgba(20, 10, 15, 0.9) 100%),
+              url('https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg') center/cover;
+}
+
+body.dark-mode .hero-content {
+  color: #ffffff;
+}
+
+body.dark-mode .hero-title {
+  color: #ffffff;
+}
+
+body.dark-mode .hero-subtitle,
+body.dark-mode .hero-child-name,
+body.dark-mode .hero-parents,
+body.dark-mode .hero-dates {
+  color: #e0e0e0;
+}
+
+body.dark-mode .hero-cta.primary {
+  background: linear-gradient(135deg, #d63384, #b02a5b);
+  color: white;
+}
+
+body.dark-mode .hero-cta.secondary {
+  background: rgba(40, 40, 40, 0.8);
+  color: #e0e0e0;
+  border: 1px solid rgba(248, 187, 217, 0.3);
+}
+
+body.dark-mode .scroll-indicator {
+  color: #e0e0e0;
+}
+
+body.dark-mode .section-title {
+  color: #ffffff;
+}
+
+body.dark-mode .section-description {
+  color: #c0c0c0;
+}
+
+body.dark-mode .about-section {
+  background: rgba(20, 20, 20, 0.95);
+  color: #e0e0e0;
+}
+
+body.dark-mode .detail-card {
+  background: rgba(30, 30, 30, 0.8);
+  border: 1px solid rgba(248, 187, 217, 0.2);
+}
+
+body.dark-mode .floating-nav {
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(248, 187, 217, 0.2);
+}
+
+body.dark-mode .nav-item {
+  color: #e0e0e0;
+}
+
+body.dark-mode .nav-item:hover {
+  background: rgba(248, 187, 217, 0.2);
+}
+
+body.dark-mode .media-item {
+  background: rgba(30, 30, 30, 0.8);
+}
+
+body.dark-mode .media-info {
+  background: rgba(20, 20, 20, 0.9);
+  color: #e0e0e0;
+}
+
+body.dark-mode .lightbox-overlay {
+  background: rgba(0, 0, 0, 0.95);
+}
+
+body.dark-mode .lightbox-container {
+  background: rgba(20, 20, 20, 0.95);
+  color: #e0e0e0;
+}
+
+body.dark-mode .guest-book-modal {
+  background: rgba(20, 20, 20, 0.95);
+  color: #e0e0e0;
+  border: 1px solid rgba(248, 187, 217, 0.3);
+}
+
+body.dark-mode .form-input,
+body.dark-mode .form-textarea {
+  background: rgba(40, 40, 40, 0.8);
+  color: #e0e0e0;
+  border: 1px solid rgba(248, 187, 217, 0.3);
+}
+
+body.dark-mode .testimonials-section {
+  background: rgba(15, 15, 15, 0.95);
+}
+
+body.dark-mode .testimonial-card {
+  background: rgba(30, 30, 30, 0.8);
+  color: #e0e0e0;
+}
+
+body.dark-mode .footer-section {
+  background: rgba(10, 10, 10, 0.95);
+  color: #e0e0e0;
+}
 .hero-background.invitation-background {
   position: absolute;
   top: 0;
