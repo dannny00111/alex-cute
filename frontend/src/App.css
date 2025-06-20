@@ -886,49 +886,145 @@ body.dark-mode .dark-mode-toggle {
 }
 
 /* Collapsible Section Styles */
-.intro-header, .testimonials-header {
+/* Enhanced Collapsible Section Styles */
+.intro-header,
+.testimonials-header,
+.timeline-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--background-light), var(--background-subtle));
+  border-radius: var(--border-radius-large);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-subtle);
+  transition: all var(--transition-normal);
 }
 
+.intro-header:hover,
+.testimonials-header:hover,
+.timeline-header:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+body.dark-mode .intro-header,
+body.dark-mode .testimonials-header,
+body.dark-mode .timeline-header {
+  background: linear-gradient(135deg, var(--dark-bg-secondary), var(--dark-bg-tertiary));
+  border-color: var(--dark-border);
+}
+
+/* Enhanced Collapse Toggle Button */
 .collapse-toggle {
-  background: rgba(248, 187, 217, 0.2);
-  border: 2px solid rgba(248, 187, 217, 0.4);
+  background: var(--primary-pink);
+  color: white;
+  border: none;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: all var(--transition-normal) var(--spring-bounce);
   font-size: 1.2rem;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-medium);
+  position: relative;
+  overflow: hidden;
+}
+
+.collapse-toggle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%) rotate(45deg);
+  transition: transform var(--transition-normal);
+}
+
+.collapse-toggle:hover::before {
+  transform: translateX(100%) rotate(45deg);
 }
 
 .collapse-toggle:hover {
-  background: rgba(248, 187, 217, 0.4);
   transform: scale(1.1);
-  box-shadow: 0 5px 15px rgba(248, 187, 217, 0.3);
+  box-shadow: var(--shadow-large);
 }
 
-.collapse-toggle.white {
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  color: white;
+.collapse-toggle:active {
+  transform: scale(0.95);
 }
 
-.collapse-toggle.white:hover {
-  background: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+/* Arrow rotation animation */
+.collapse-toggle .toggle-arrow {
+  transition: transform var(--transition-normal) var(--spring-bounce);
 }
 
+.collapsed .collapse-toggle .toggle-arrow {
+  transform: rotate(180deg);
+}
+
+.expanded .collapse-toggle .toggle-arrow {
+  transform: rotate(0deg);
+}
+
+/* Small collapse toggle variant */
 .collapse-toggle.small {
-  width: 35px;
-  height: 35px;
+  width: 32px;
+  height: 32px;
   font-size: 1rem;
+}
+
+/* Dark mode for collapse toggle */
+body.dark-mode .collapse-toggle {
+  background: var(--dark-accent);
+  box-shadow: 0 4px 15px var(--dark-shadow);
+}
+
+/* Staggered Animation for Child Elements */
+.collapsible-content.expanded > * {
+  animation: slideInStaggered var(--transition-slow) var(--ease-out-quart) both;
+}
+
+.collapsible-content.expanded > *:nth-child(1) { animation-delay: 0.1s; }
+.collapsible-content.expanded > *:nth-child(2) { animation-delay: 0.15s; }
+.collapsible-content.expanded > *:nth-child(3) { animation-delay: 0.2s; }
+.collapsible-content.expanded > *:nth-child(4) { animation-delay: 0.25s; }
+.collapsible-content.expanded > *:nth-child(5) { animation-delay: 0.3s; }
+
+@keyframes slideInStaggered {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced Section Borders */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    var(--border-color) 20%, 
+    var(--primary-pink) 50%, 
+    var(--border-color) 80%, 
+    transparent 100%
+  );
+  margin: 2rem 0;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
 }
 
 .detail-header {
