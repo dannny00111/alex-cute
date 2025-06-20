@@ -101,3 +101,87 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+## user_problem_statement: "Add Google Drive background video to hero section, add second video to gallery, implement media reshuffling on page reload, and make implementation neat"
+
+## backend:
+##   - task: "Backend API Setup"
+##     implemented: true
+##     working: true
+##     file: "backend/server.py"
+##     stuck_count: 0
+##     priority: "low"
+##     needs_retesting: false
+##     status_history:
+##         - working: true
+##         - agent: "main"
+##         - comment: "Backend is running with basic FastAPI setup and MongoDB connection"
+
+## frontend:
+##   - task: "Background Video Implementation"
+##     implemented: true
+##     working: "NA"
+##     file: "frontend/src/App.js"
+##     stuck_count: 0
+##     priority: "high"
+##     needs_retesting: true
+##     status_history:
+##         - working: "NA"
+##         - agent: "main"
+##         - comment: "Added background video element to hero section with Google Drive video (1IWNvGhXP1LKhi_CR2y_LJsxy6ikQ9F7q), configured as muted autoplay loop with no controls"
+##   
+##   - task: "Additional Video in Gallery"
+##     implemented: true
+##     working: "NA"
+##     file: "frontend/src/App.js"
+##     stuck_count: 0
+##     priority: "high"
+##     needs_retesting: true
+##     status_history:
+##         - working: "NA"
+##         - agent: "main"
+##         - comment: "Added second Google Drive video (163rWffXF7pW38eBzRbaZz2yycHMkme_3) to video gallery collection"
+##   
+##   - task: "Media Reshuffling on Page Reload"
+##     implemented: true
+##     working: "NA"
+##     file: "frontend/src/App.js"
+##     stuck_count: 0
+##     priority: "high"
+##     needs_retesting: true
+##     status_history:
+##         - working: "NA"
+##         - agent: "main"
+##         - comment: "Implemented Fisher-Yates shuffle algorithm to randomly reorder both photos and videos on each page reload"
+##   
+##   - task: "UI/UX Cleanup and Styling"
+##     implemented: true
+##     working: "NA"
+##     file: "frontend/src/App.css"
+##     stuck_count: 0
+##     priority: "medium"
+##     needs_retesting: true
+##     status_history:
+##         - working: "NA"
+##         - agent: "main"
+##         - comment: "Updated CSS for proper video background display, fallback handling, and removed unused video control styles"
+
+## metadata:
+##   created_by: "main_agent"
+##   version: "1.0"
+##   test_sequence: 1
+##   run_ui: true
+
+## test_plan:
+##   current_focus:
+##     - "Background Video Implementation"
+##     - "Additional Video in Gallery"
+##     - "Media Reshuffling on Page Reload"
+##     - "UI/UX Cleanup and Styling"
+##   stuck_tasks: []
+##   test_all: true
+##   test_priority: "high_first"
+
+## agent_communication:
+##     - agent: "main"
+##     - message: "Implemented video background functionality, gallery video addition, and media reshuffling. Ready for frontend testing to verify: 1) Background video plays correctly in hero section 2) Second video appears in gallery 3) Media order changes on page reload 4) UI looks clean and professional. Password is 'Alexandra2025'"
