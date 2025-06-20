@@ -11,6 +11,66 @@ body {
   color: #2c2c2c;
   overflow-x: hidden;
   scroll-behavior: smooth;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}
+
+body.dark-mode .landing-page {
+  background: #1a1a1a;
+}
+
+body.dark-mode .password-screen {
+  background: linear-gradient(135deg, #2c1810, #1a1a1a, #2c1810);
+}
+
+body.dark-mode .password-card {
+  background: rgba(30, 30, 30, 0.95);
+  color: #e0e0e0;
+  border: 1px solid rgba(248, 187, 217, 0.3);
+}
+
+body.dark-mode .password-input {
+  background: rgba(40, 40, 40, 0.8);
+  color: #e0e0e0;
+  border: 1px solid rgba(248, 187, 217, 0.3);
+}
+
+body.dark-mode .password-input::placeholder {
+  color: #a0a0a0;
+}
+
+/* Dark Mode Toggle Button */
+.dark-mode-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.dark-mode-toggle:hover {
+  background: rgba(248, 187, 217, 0.2);
+  transform: scale(1.1);
+}
+
+body.dark-mode .dark-mode-toggle {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(248, 187, 217, 0.3);
 }
 
 .App {
