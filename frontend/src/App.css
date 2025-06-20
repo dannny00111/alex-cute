@@ -1178,7 +1178,52 @@ body.dark-mode .footer-section {
   z-index: -1;
 }
 
-/* Fallback Image */
+/* Password Screen Mobile Improvements */
+@media (max-width: 768px) {
+  .password-container {
+    padding: 1rem;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .password-card {
+    padding: 2rem 1.5rem;
+    margin: 0;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 15px;
+  }
+  
+  .password-title {
+    font-size: 1.8rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  
+  .password-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .password-details {
+    font-size: 0.85rem;
+    margin-bottom: 2rem;
+  }
+  
+  .dark-mode-toggle {
+    top: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    font-size: 1.3rem;
+  }
+  
+  .angel-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+}
 .hero-background-fallback {
   position: absolute;
   top: 0;
