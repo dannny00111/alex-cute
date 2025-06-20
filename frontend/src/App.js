@@ -828,25 +828,43 @@ const ChristeningLandingPage = () => {
             <div className="about-content">
               <button className="close-section-btn" onClick={toggleAboutSection}>×</button>
               <h2 className="section-title">About Our Precious {ceremonyDetails.displayName}</h2>
+              
               <div className="about-details">
                 <div className="detail-card">
-                  <h3>👶 Birth Details</h3>
+                  <div className="detail-header">
+                    <h3>👶 Birth Details</h3>
+                    <button 
+                      className="collapse-toggle small"
+                      onClick={() => toggleSection('aboutNames')}
+                      title={collapsedSections.aboutNames ? 'Expand' : 'Collapse'}
+                    >
+                      {collapsedSections.aboutNames ? '⬇️' : '⬆️'}
+                    </button>
+                  </div>
                   <p><strong>Date of Birth:</strong> {ceremonyDetails.dateOfBirth}</p>
                   <p><strong>Parents:</strong> {ceremonyDetails.parents}</p>
+                  <p><strong>Naming Date:</strong> {ceremonyDetails.ceremonyDate}</p>
                 </div>
+                
                 <div className="detail-card">
                   <h3>✨ Her Beautiful Names</h3>
-                  <div className="names-breakdown">
-                    {ceremonyDetails.namesMeanings.map((name, index) => (
-                      <p key={index}>
-                        <strong>{name.name}</strong> - {name.meaning}
-                      </p>
-                    ))}
-                  </div>
+                  {!collapsedSections.aboutNames ? (
+                    <div className="names-breakdown">
+                      {ceremonyDetails.namesMeanings.map((name, index) => (
+                        <p key={index}>
+                          <strong>{name.name}</strong> - {name.meaning}
+                        </p>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="names-summary">
+                      <strong>{ceremonyDetails.fullName}</strong> - Click to expand meanings
+                    </p>
+                  )}
                 </div>
+                
                 <div className="detail-card">
-                  <h3>🎉 Ceremony Details</h3>
-                  <p><strong>Naming Date:</strong> {ceremonyDetails.ceremonyDate}</p>
+                  <h3>🎉 Ceremony Highlights</h3>
                   <p><strong>Theme:</strong> Divine Blessings & Sacred Names</p>
                   <p><strong>Significance:</strong> A celebration of life, faith, and family</p>
                 </div>
