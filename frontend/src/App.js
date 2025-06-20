@@ -1145,60 +1145,45 @@ const ChristeningLandingPage = () => {
       <section id="testimonials" className="testimonials-section" ref={testimonialsRef}>
         <div className="testimonials-background"></div>
         <div className="container">
-          <h2 className="section-title white animate-on-scroll">Messages of Love & Blessings</h2>
-          
-          <div className="testimonials-grid animate-on-scroll">
-            <div className="testimonial-card hover-lift">
-              <div className="testimonial-quote">"</div>
-              <p className="testimonial-text">
-                "What a beautiful and blessed day! {ceremonyDetails.displayName} looked like an angel during her naming ceremony. 
-                Her names are so meaningful and these photos will be treasured forever."
-              </p>
-              <div className="testimonial-author">
-                <div className="author-info">
-                  <h4>Grandma Osho</h4>
-                  <span>Proud Grandmother</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="testimonial-card hover-lift">
-              <div className="testimonial-quote">"</div>
-              <p className="testimonial-text">
-                "The ceremony was absolutely magical. Seeing {ceremonyDetails.displayName} surrounded by so much love 
-                brought tears to my eyes. Thank you for sharing these precious moments from {ceremonyDetails.ceremonyDate}."
-              </p>
-              <div className="testimonial-author">
-                <div className="author-info">
-                  <h4>Aunt Bukola</h4>
-                  <span>Loving Aunt</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="testimonial-card hover-lift">
-              <div className="testimonial-quote">"</div>
-              <p className="testimonial-text">
-                "God's blessings were evident throughout the entire celebration. {ceremonyDetails.displayName} is 
-                truly blessed to have such a loving family. May she grow in wisdom and faith."
-              </p>
-              <div className="testimonial-author">
-                <div className="author-info">
-                  <h4>Pastor Williams</h4>
-                  <span>Family Minister</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="add-message-section animate-on-scroll">
+          <div className="testimonials-header">
+            <h2 className="section-title white animate-on-scroll">Messages of Love & Blessings</h2>
             <button 
-              onClick={() => setShowGuestBook(true)} 
-              className="add-message-btn"
+              className="collapse-toggle white"
+              onClick={() => toggleSection('testimonials')}
+              title={collapsedSections.testimonials ? 'Expand' : 'Collapse'}
             >
-              ✍️ Share Your Blessing
+              {collapsedSections.testimonials ? '⬇️' : '⬆️'}
             </button>
           </div>
+          
+          {!collapsedSections.testimonials && (
+            <>
+              <div className="testimonials-grid animate-on-scroll">
+                {guestComments.slice(0, 4).map((comment) => (
+                  <div key={comment.id} className="testimonial-card">
+                    <div className="testimonial-quote">"</div>
+                    <p className="testimonial-text">{comment.message}</p>
+                    <div className="testimonial-author">
+                      <div className="comment-avatar">{comment.avatar}</div>
+                      <div className="author-info">
+                        <h4>{comment.name}</h4>
+                        <span>{comment.timestamp}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="add-message-section">
+                <button
+                  className="add-message-btn"
+                  onClick={() => setShowGuestBook(true)}
+                >
+                  💌 Add Your Blessing
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </section>
 
