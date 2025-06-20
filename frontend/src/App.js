@@ -35,6 +35,9 @@ const ChristeningLandingPage = () => {
   const [showAboutSection, setShowAboutSection] = useState(false);
   const [showDetailsPanel, setShowDetailsPanel] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [videoPlaying, setVideoPlaying] = useState(true);
+  const [videoMuted, setVideoMuted] = useState(true);
+  const [showVideoControls, setShowVideoControls] = useState(false);
   
   // Refs for scroll animations and interactions
   const heroRef = useRef(null);
@@ -42,10 +45,15 @@ const ChristeningLandingPage = () => {
   const testimonialsRef = useRef(null);
   const photoViewerRef = useRef(null);
   const collageCanvasRef = useRef(null);
+  const videoRef = useRef(null);
 
   // Google Drive API configuration
   const FOLDER_ID = "1sk7C-nQPr2yfFtbpQGjFO1OPlXp9HPB9";
   const API_KEY = "AIzaSyCMaBUGCG5oZUdoF1VZz-wKQehd_ktYA5I";
+
+  // Video configuration
+  const VIDEO_ID = "1IWNvGhXP1LKhi_CR2y_LJsxy6ikQ9F7q";
+  const VIDEO_URL = `https://drive.google.com/uc?export=download&id=${VIDEO_ID}`;
 
   // Real ceremony details
   const ceremonyDetails = {
@@ -56,6 +64,40 @@ const ChristeningLandingPage = () => {
     dateOfBirth: "11th June 2025",
     ceremonyDate: "18th June 2025",
     password: "Alexandra2025"
+  };
+
+  // Video control functions
+  const toggleVideoPlayback = () => {
+    if (videoRef.current) {
+      if (videoPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setVideoPlaying(!videoPlaying);
+    }
+  };
+
+  const toggleVideoMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoMuted;
+      setVideoMuted(!videoMuted);
+    }
+  };
+
+  const handleVideoLoad = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = true;
+      videoRef.current.play().catch(e => {
+        console.log('Autoplay prevented:', e);
+        setVideoPlaying(false);
+      });
+    }
+  };
+
+  const handleVideoError = (e) => {
+    console.log('Video load error:', e);
+    // Video will fallback to background image
   };
 
   // Check if mobile device
