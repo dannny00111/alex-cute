@@ -837,12 +837,12 @@ const ChristeningLandingPage = () => {
               >
                 About Alexandra
               </button>
-<<<<<<< HEAD
               <button 
-                onClick={(e) => handleButtonClick(() => enterImmersiveMode(mediaData.photos[0]), e)}
+                onClick={(e) => handleButtonClick(() => toggleAboutSection(), e)}
                 className="hero-cta secondary"
               >
-            </div>
+                About Alexandra
+              </button>
             </div>
           </div>
         </div>
