@@ -1,38 +1,285 @@
-import { useEffect } from "react";
-import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import './App.css';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const ChristeningLandingPage = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('photos');
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
+  // Simple password check (in production, this should be server-side)
+  const correctPassword = 'Alexandra2024';
+
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    setTimeout(() => {
+      if (password === correctPassword) {
+        setIsAuthenticated(true);
+      } else {
+        alert('Incorrect password. Please try again.');
+      }
+      setIsLoading(false);
+    }, 1000);
   };
 
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
+  const handleGoogleDriveAccess = () => {
+    window.open('https://drive.google.com/drive/folders/1sk7C-nQPr2yfFtbpQGjFO1OPlXp9HPB9', '_blank');
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="password-screen">
+        <div className="password-overlay"></div>
+        <div className="password-container">
+          <div className="password-card">
+            <div className="angel-icon">👼</div>
+            <h1 className="password-title">Alexandra's Heavenly Blessing</h1>
+            <p className="password-subtitle">Enter the sacred password to view precious memories</p>
+            
+            <form onSubmit={handlePasswordSubmit} className="password-form">
+              <div className="password-input-group">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter password"
+                  className="password-input"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="password-toggle"
+                >
+                  {showPassword ? '👁️' : '👁️‍🗨️'}
+                </button>
+              </div>
+              
+              <button type="submit" className="password-submit" disabled={isLoading}>
+                {isLoading ? (
+                  <span className="loading-spinner"></span>
+                ) : (
+                  'Enter Sacred Gallery'
+                )}
+              </button>
+            </form>
+            
+            <div className="password-decoration">
+              <div className="decoration-line"></div>
+              <span className="decoration-text">✨ Blessed Memories Await ✨</span>
+              <div className="decoration-line"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
+    <div className="landing-page">
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="hero-background"></div>
+        <div className="hero-content">
+          <div className="hero-text">
+            <h1 className="hero-title">
+              <span className="title-line">Alexandra's</span>
+              <span className="title-line highlight">Heavenly Blessing</span>
+            </h1>
+            <p className="hero-subtitle">
+              A sacred celebration captured in precious moments
+            </p>
+            <p className="hero-date">Christening Day • 2024</p>
+          </div>
+          <div className="hero-decoration">
+            <div className="floating-element float-1">🌸</div>
+            <div className="floating-element float-2">✨</div>
+            <div className="floating-element float-3">🕊️</div>
+            <div className="floating-element float-4">💕</div>
+          </div>
+        </div>
+        <div className="scroll-indicator">
+          <div className="scroll-arrow"></div>
+          <span>Scroll to explore</span>
+        </div>
+      </section>
+
+      {/* Gallery Introduction */}
+      <section className="gallery-intro">
+        <div className="container">
+          <div className="intro-content">
+            <h2 className="section-title">Sacred Memories</h2>
+            <p className="section-description">
+              Witness the divine moments of Alexandra's christening through our carefully curated collection 
+              of photos and videos. Each image tells a story of love, faith, and heavenly blessings.
+            </p>
+            
+            <div className="gallery-preview">
+              <div className="preview-image">
+                <img src="https://images.pexels.com/photos/32488939/pexels-photo-32488939.jpeg" alt="Christening celebration" />
+                <div className="preview-overlay">
+                  <div className="preview-stats">
+                    <div className="stat">
+                      <span className="stat-number">47</span>
+                      <span className="stat-label">Photos</span>
+                    </div>
+                    <div className="stat">
+                      <span className="stat-number">12</span>
+                      <span className="stat-label">Videos</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Media Gallery */}
+      <section className="media-gallery">
+        <div className="container">
+          <div className="gallery-header">
+            <div className="tab-navigation">
+              <button 
+                className={`tab-button ${activeTab === 'photos' ? 'active' : ''}`}
+                onClick={() => setActiveTab('photos')}
+              >
+                📸 Photos
+              </button>
+              <button 
+                className={`tab-button ${activeTab === 'videos' ? 'active' : ''}`}
+                onClick={() => setActiveTab('videos')}
+              >
+                🎥 Videos
+              </button>
+              <button 
+                className={`tab-button ${activeTab === 'all' ? 'active' : ''}`}
+                onClick={() => setActiveTab('all')}
+              >
+                🎀 All Media
+              </button>
+            </div>
+          </div>
+
+          <div className="gallery-content">
+            <div className="media-access-card">
+              <div className="access-card-content">
+                <div className="access-icon">🎁</div>
+                <h3>Access Full Gallery</h3>
+                <p>View and download all precious memories from Alexandra's special day</p>
+                <button onClick={handleGoogleDriveAccess} className="access-button">
+                  Open Google Drive Gallery
+                  <span className="button-arrow">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="testimonials-section">
+        <div className="testimonials-background"></div>
+        <div className="container">
+          <h2 className="section-title white">Messages of Love</h2>
+          
+          <div className="testimonials-grid">
+            <div className="testimonial-card">
+              <div className="testimonial-quote">"</div>
+              <p className="testimonial-text">
+                "What a beautiful and blessed day! Alexandra looked like an angel during her christening. 
+                These photos will be treasured forever."
+              </p>
+              <div className="testimonial-author">
+                <div className="author-info">
+                  <h4>Grandma Rose</h4>
+                  <span>Proud Grandmother</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="testimonial-card">
+              <div className="testimonial-quote">"</div>
+              <p className="testimonial-text">
+                "The ceremony was absolutely magical. Seeing Alexandra surrounded by so much love 
+                brought tears to my eyes. Thank you for sharing these precious moments."
+              </p>
+              <div className="testimonial-author">
+                <div className="author-info">
+                  <h4>Aunt Maria</h4>
+                  <span>Loving Aunt</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="testimonial-card">
+              <div className="testimonial-quote">"</div>
+              <p className="testimonial-text">
+                "God's blessings were evident throughout the entire celebration. Alexandra is 
+                truly blessed to have such a loving family surrounding her."
+              </p>
+              <div className="testimonial-author">
+                <div className="author-info">
+                  <h4>Father Michael</h4>
+                  <span>Officiating Priest</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer Section */}
+      <footer className="footer-section">
+        <div className="footer-background"></div>
+        <div className="container">
+          <div className="footer-content">
+            <div className="footer-main">
+              <h3 className="footer-title">Alexandra's Christening</h3>
+              <p className="footer-subtitle">
+                A day filled with divine blessings, family love, and heavenly joy
+              </p>
+              
+              <div className="footer-details">
+                <div className="detail-item">
+                  <span className="detail-icon">📅</span>
+                  <span>Celebrated in 2024</span>
+                </div>
+                <div className="detail-item">
+                  <span className="detail-icon">⛪</span>
+                  <span>Sacred Ceremony</span>
+                </div>
+                <div className="detail-item">
+                  <span className="detail-icon">👪</span>
+                  <span>Family & Friends</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="footer-access">
+              <h4>Access Media Gallery</h4>
+              <p>View and download all photos and videos from this blessed day</p>
+              <button onClick={handleGoogleDriveAccess} className="footer-button">
+                Visit Gallery
+              </button>
+            </div>
+          </div>
+
+          <div className="footer-bottom">
+            <div className="footer-decoration">
+              <div className="decoration-line"></div>
+              <span className="decoration-text">✨ Blessed with Love ✨</span>
+              <div className="decoration-line"></div>
+            </div>
+            <p className="footer-copyright">
+              © 2024 Alexandra's Christening • Created with Love
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
@@ -40,13 +287,7 @@ const Home = () => {
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <ChristeningLandingPage />
     </div>
   );
 }
