@@ -1037,31 +1037,25 @@ const ChristeningLandingPage = () => {
         </section>
       )}
 
-      {/* Enhanced Media Gallery */}
+      {/* Simplified Media Gallery */}
       <section id="gallery" className="media-gallery" ref={galleryRef}>
         <div className="container">
           <div className="gallery-header animate-on-scroll">
-            <div className="gallery-controls">
-              <div className="tab-navigation">
-                <button 
-                  className={`tab-button ${activeTab === 'photos' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('photos')}
-                >
-                  📸 Photos
-                </button>
-                <button 
-                  className={`tab-button ${activeTab === 'videos' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('videos')}
-                >
-                  🎥 Videos
-                </button>
-                <button 
-                  className={`tab-button ${activeTab === 'all' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('all')}
-                >
-                  🎀 All Media
-                </button>
-              </div>
+            <h2 className="section-title">Sacred Memories</h2>
+            <p className="gallery-subtitle">Beautiful moments from {ceremonyDetails.displayName}'s naming ceremony</p>
+          </div>
+
+          {/* Photos Section - Collapsible */}
+          <div className="media-section">
+            <button 
+              className="section-toggle"
+              onClick={() => setCollapsedSections({...collapsedSections, photos: !collapsedSections.photos})}
+            >
+              <span className="section-title">📸 All Photos ({mediaData.photos.length})</span>
+              <span className="toggle-arrow">
+                {collapsedSections.photos ? '⬇️' : '⬆️'}
+              </span>
+            </button>
               
               <div className="layout-controls">
                 <button 
