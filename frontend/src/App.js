@@ -72,27 +72,27 @@ const ChristeningLandingPage = () => {
 
   // Video control functions
   const toggleVideoPlayback = () => {
-    if (videoRef.current) {
+    if (backgroundVideoRef.current) {
       if (videoPlaying) {
-        videoRef.current.pause();
+        backgroundVideoRef.current.pause();
       } else {
-        videoRef.current.play();
+        backgroundVideoRef.current.play();
       }
       setVideoPlaying(!videoPlaying);
     }
   };
 
   const toggleVideoMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !videoMuted;
+    if (backgroundVideoRef.current) {
+      backgroundVideoRef.current.muted = !videoMuted;
       setVideoMuted(!videoMuted);
     }
   };
 
   const handleVideoLoad = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = true;
-      videoRef.current.play().catch(e => {
+    if (backgroundVideoRef.current) {
+      backgroundVideoRef.current.muted = true;
+      backgroundVideoRef.current.play().catch(e => {
         console.log('Autoplay prevented:', e);
         setVideoPlaying(false);
       });
