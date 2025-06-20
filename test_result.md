@@ -219,12 +219,12 @@
 
 ## test_plan:
 ##   current_focus:
-##     - "Background Video Implementation"
-##     - "Additional Video in Gallery"
-##     - "Media Reshuffling on Page Reload"
-##     - "UI/UX Cleanup and Styling"
+##     - "Remove Photo/Video Count Statistics"
+##     - "Background Video on Access Code Page"
+##     - "Collapsible Sections Implementation"
+##     - "Netlify Deployment Configuration"
 ##   stuck_tasks: []
-##   test_all: true
+##   test_all: false
 ##   test_priority: "high_first"
 
 ## agent_communication:
