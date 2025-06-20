@@ -70,37 +70,28 @@ const ChristeningLandingPage = () => {
     password: "Alexandra2025"
   };
 
-  // Video control functions
-  const toggleVideoPlayback = () => {
-    if (backgroundVideoRef.current) {
-      if (videoPlaying) {
-        backgroundVideoRef.current.pause();
-      } else {
-        backgroundVideoRef.current.play();
-      }
-      setVideoPlaying(!videoPlaying);
+  // Fisher-Yates shuffle algorithm
+  const shuffleArray = (array) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
+    return shuffled;
   };
 
-  const toggleVideoMute = () => {
-    if (backgroundVideoRef.current) {
-      backgroundVideoRef.current.muted = !videoMuted;
-      setVideoMuted(!videoMuted);
-    }
-  };
-
-  const handleVideoLoad = () => {
+  // Background video control functions (simplified for background use)
+  const handleBackgroundVideoLoad = () => {
     if (backgroundVideoRef.current) {
       backgroundVideoRef.current.muted = true;
       backgroundVideoRef.current.play().catch(e => {
-        console.log('Autoplay prevented:', e);
-        setVideoPlaying(false);
+        console.log('Background video autoplay prevented:', e);
       });
     }
   };
 
-  const handleVideoError = (e) => {
-    console.log('Video load error:', e);
+  const handleBackgroundVideoError = (e) => {
+    console.log('Background video load error:', e);
     // Video will fallback to background image
   };
 
