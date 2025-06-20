@@ -202,18 +202,92 @@ const ChristeningLandingPage = () => {
           </div>
 
           <div className="gallery-content">
-            <div className="media-access-card">
-              <div className="access-card-content">
-                <div className="access-icon">🎁</div>
-                <h3>Access Full Gallery</h3>
-                <p>View and download all precious memories from Alexandra's special day</p>
-                <button onClick={handleViewInDrive} className="access-button">
-                  Open Google Drive Gallery
-                  <span className="button-arrow">→</span>
+            <div className="integrated-gallery">
+              <div className="gallery-grid">
+                {getFilteredMedia().map((media) => (
+                  <div key={media.id} className="media-item" onClick={() => handleMediaClick(media)}>
+                    <div className="media-thumbnail">
+                      <img src={media.thumbnail} alt={media.title} />
+                      <div className="media-overlay">
+                        <div className="media-type">
+                          {media.type === 'video' ? (
+                            <>
+                              <span className="play-icon">▶️</span>
+                              <span className="duration">{media.duration}</span>
+                            </>
+                          ) : (
+                            <span className="photo-icon">📸</span>
+                          )}
+                        </div>
+                        <div className="media-actions">
+                          <button className="action-button view-button" title="View">
+                            👁️
+                          </button>
+                          <button 
+                            className="action-button download-button" 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDownload(media);
+                            }}
+                            title="Download"
+                          >
+                            ⬇️
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="media-title">{media.title}</div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="gallery-footer">
+                <p className="gallery-note">
+                  💝 Click any image to view in full size • Click download to save to your device
+                </p>
+                <button onClick={handleViewInDrive} className="drive-access-button">
+                  View Original Google Drive Folder
                 </button>
               </div>
             </div>
           </div>
+
+          {/* Lightbox Modal */}
+          {showLightbox && selectedMedia && (
+            <div className="lightbox-overlay" onClick={() => setShowLightbox(false)}>
+              <div className="lightbox-container" onClick={(e) => e.stopPropagation()}>
+                <button className="lightbox-close" onClick={() => setShowLightbox(false)}>
+                  ✕
+                </button>
+                
+                <div className="lightbox-content">
+                  {selectedMedia.type === 'video' ? (
+                    <div className="video-placeholder">
+                      <div className="video-info">
+                        <h3>{selectedMedia.title}</h3>
+                        <p>Duration: {selectedMedia.duration}</p>
+                        <p>📹 Video content available in Google Drive</p>
+                        <button onClick={() => handleDownload(selectedMedia)} className="download-from-lightbox">
+                          Download Video
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <img src={selectedMedia.thumbnail} alt={selectedMedia.title} className="lightbox-image" />
+                  )}
+                </div>
+                
+                <div className="lightbox-footer">
+                  <h3 className="lightbox-title">{selectedMedia.title}</h3>
+                  <div className="lightbox-actions">
+                    <button onClick={() => handleDownload(selectedMedia)} className="lightbox-download">
+                      Download Original
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
