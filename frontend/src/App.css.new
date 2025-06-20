@@ -1,0 +1,140 @@
+/* Enhanced Collapsible Section Styles */
+.intro-header,
+.testimonials-header,
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--background-light), var(--background-subtle));
+  border-radius: var(--border-radius-large);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-subtle);
+  transition: all var(--transition-normal);
+}
+
+.intro-header:hover,
+.testimonials-header:hover,
+.timeline-header:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+.dark-mode .intro-header,
+.dark-mode .testimonials-header,
+.dark-mode .timeline-header {
+  background: linear-gradient(135deg, var(--dark-bg-secondary), var(--dark-bg-tertiary));
+  border-color: var(--dark-border);
+}
+
+/* Enhanced Collapse Toggle Button */
+.collapse-toggle {
+  background: var(--primary-pink);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal) var(--spring-bounce);
+  font-size: 1.2rem;
+  box-shadow: var(--shadow-medium);
+  position: relative;
+  overflow: hidden;
+}
+
+.collapse-toggle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%) rotate(45deg);
+  transition: transform var(--transition-normal);
+}
+
+.collapse-toggle:hover::before {
+  transform: translateX(100%) rotate(45deg);
+}
+
+.collapse-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-large);
+}
+
+.collapse-toggle:active {
+  transform: scale(0.95);
+}
+
+/* Arrow rotation animation */
+.collapse-toggle .toggle-arrow {
+  transition: transform var(--transition-normal) var(--spring-bounce);
+}
+
+.collapsed .collapse-toggle .toggle-arrow {
+  transform: rotate(180deg);
+}
+
+.expanded .collapse-toggle .toggle-arrow {
+  transform: rotate(0deg);
+}
+
+/* Small collapse toggle variant */
+.collapse-toggle.small {
+  width: 32px;
+  height: 32px;
+  font-size: 1rem;
+}
+
+/* Dark mode for collapse toggle */
+.dark-mode .collapse-toggle {
+  background: var(--dark-accent);
+  box-shadow: 0 4px 15px var(--dark-shadow);
+}
+
+/* Staggered Animation for Child Elements */
+.collapsible-content.expanded > * {
+  animation: slideInStaggered var(--transition-slow) var(--ease-out-quart) both;
+}
+
+.collapsible-content.expanded > *:nth-child(1) { animation-delay: 0.1s; }
+.collapsible-content.expanded > *:nth-child(2) { animation-delay: 0.15s; }
+.collapsible-content.expanded > *:nth-child(3) { animation-delay: 0.2s; }
+.collapsible-content.expanded > *:nth-child(4) { animation-delay: 0.25s; }
+.collapsible-content.expanded > *:nth-child(5) { animation-delay: 0.3s; }
+
+@keyframes slideInStaggered {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced Section Borders */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    var(--border-color) 20%, 
+    var(--primary-pink) 50%, 
+    var(--border-color) 80%, 
+    transparent 100%
+  );
+  margin: 2rem 0;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
