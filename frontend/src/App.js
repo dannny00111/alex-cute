@@ -207,7 +207,7 @@ const ChristeningLandingPage = () => {
                 <div className="access-icon">🎁</div>
                 <h3>Access Full Gallery</h3>
                 <p>View and download all precious memories from Alexandra's special day</p>
-                <button onClick={handleGoogleDriveAccess} className="access-button">
+                <button onClick={handleViewInDrive} className="access-button">
                   Open Google Drive Gallery
                   <span className="button-arrow">→</span>
                 </button>
